@@ -12,22 +12,9 @@ else
     BOOTLOADER=systemd-boot
 fi
 
-# Chroot en /mnt para ejecutar comandos dentro del sistema
-arch-chroot /mnt /bin/bash <<'EOF'
-set -e
-
-echo "Configurar hostname"
+# ---- Solicitar usuario y contraseñas fuera del chroot ----
 read -rp "Ingrese el hostname del sistema: " HOSTNAME
-echo "$HOSTNAME" > /etc/hostname
 
-# Hosts básico
-cat <<EOL > /etc/hosts
-127.0.0.1   localhost
-::1         localhost
-127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
-EOL
-
-echo "Configurar usuario"
 read -rp "Ingrese nombre de usuario: " USERNAME
 
 # Contraseña del usuario
@@ -40,14 +27,11 @@ while true; do
     echo "Las contraseñas no coinciden, intente de nuevo."
 done
 
-useradd -m -G wheel -s /bin/bash "$USERNAME"
-echo "$USERNAME:$USERPASS" | chpasswd
-
 # Contraseña root
 read -rp "¿Desea que root tenga la misma contraseña que $USERNAME? [y/N]: " SAMEPASS
 case "$SAMEPASS" in
     [yY][eE][sS]|[yY])
-        echo "root:$USERPASS" | chpasswd
+        ROOTPASS="$USERPASS"
         ;;
     *)
         while true; do
@@ -58,11 +42,33 @@ case "$SAMEPASS" in
             [[ "$ROOTPASS" == "$ROOTPASS2" ]] && break
             echo "Las contraseñas no coinciden, intente de nuevo."
         done
-        echo "root:$ROOTPASS" | chpasswd
         ;;
 esac
 
-echo "Configurar locale"
+# ---- Ejecutar chroot ----
+arch-chroot /mnt /bin/bash <<EOF
+set -e
+
+# Configurar hostname
+echo "$HOSTNAME" > /etc/hostname
+cat <<EOL > /etc/hosts
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
+EOL
+
+# Crear usuario y root
+useradd -m -G wheel -s /bin/bash "$USERNAME"
+echo "$USERNAME:$USERPASS" | chpasswd
+echo "Usuario $USERNAME creado."
+
+echo "root:$ROOTPASS" | chpasswd
+echo "Contraseña de root configurada."
+
+# Configurar sudo para el grupo wheel
+sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+
+# Configurar locale
 echo "es_AR.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
@@ -71,19 +77,19 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 echo "Intentando detectar zona horaria..."
 TZ=$(timedatectl list-timezones | grep -i "$(curl -s ifconfig.me)" | head -n 1 || true)
 if [[ -z "$TZ" ]]; then
-    echo "No se pudo detectar automáticamente la zona horaria."
     timedatectl list-timezones
     read -rp "Ingrese su zona horaria (ej: America/Argentina/Buenos_Aires): " TZ
 fi
 timedatectl set-timezone "$TZ"
 timedatectl set-ntp true
 
-echo "Activar NetworkManager"
+# Habilitar NetworkManager
 systemctl enable NetworkManager
 
 # Añadir swapfile al fstab
 echo "/swapfile none swap sw 0 0" >> /etc/fstab
 
+# Instalar bootloader
 echo "Instalando bootloader $BOOTLOADER..."
 if [[ "$BOOTLOADER" == "systemd-boot" ]]; then
     bootctl --path=/boot install
@@ -106,5 +112,7 @@ else
     grub-mkconfig -o /boot/grub/grub.cfg
 fi
 
-echo "Configuración completa."
 EOF
+
+echo "Configuración completa. Ahora podés continuar con el script 05-install_desktop.sh."
+
