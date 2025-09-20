@@ -38,24 +38,23 @@ for d in "$RICE_DIR/"*; do
     fi
 done
 
-# Ajustar permisos
+# Aplicar wallpaper si existe
+WALLPAPER_SRC="$CONFIGS_DIR/wallpaper.jpg"
+if [[ -f "$WALLPAPER_SRC" ]]; then
+    mkdir -p "$USER_HOME/wallpapers"
+    cp "$WALLPAPER_SRC" "$USER_HOME/wallpapers/"
+    echo "Wallpaper copiado. Se aplicará al iniciar sesión."
+else
+    echo "No se encontró wallpaper.jpg en configs."
+fi
+
+# Ajustar permisos dentro del chroot (ahí sí existe el usuario)
 arch-chroot /mnt /bin/bash <<EOF
 chown -R $USER:$USER /home/$USER/.config
 if [[ -d /home/$USER/wallpapers ]]; then
     chown -R $USER:$USER /home/$USER/wallpapers
 fi
 EOF
-
-# Aplicar wallpaper si existe
-WALLPAPER_SRC="$CONFIGS_DIR/wallpaper.jpg"
-if [[ -f "$WALLPAPER_SRC" ]]; then
-    mkdir -p "$USER_HOME/wallpapers"
-    cp "$WALLPAPER_SRC" "$USER_HOME/wallpapers/"
-    chown $USER:$USER "$USER_HOME/wallpapers/wallpaper.jpg"
-    echo "Wallpaper copiado. Se aplicará al iniciar sesión."
-else
-    echo "No se encontró wallpaper.jpg en configs."
-fi
 
 echo "Ricing completado. Puedes iniciar sesión y ver tu nuevo setup."
 
