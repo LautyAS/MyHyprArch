@@ -28,7 +28,7 @@ pacman -S --noconfirm \
     wireplumber \
     polkit polkit-gnome \
     nm-connection-editor \
-    htop neofetch \
+    htop fastfetch \
     bash-completion \
     xdg-desktop-portal \
     xdg-desktop-portal-wlr \

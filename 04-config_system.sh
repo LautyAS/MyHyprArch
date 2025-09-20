@@ -94,14 +94,14 @@ echo "Instalando bootloader $BOOTLOADER..."
 if [[ "$BOOTLOADER" == "systemd-boot" ]]; then
     bootctl --path=/boot/efi install
     chmod 700 /boot/efi
-    cat <<EOL > /boot/loader/loader.conf
+    cat <<EOL > /boot/efi/loader/loader.conf
 default arch
 timeout 3
 editor 0
 EOL
 
     ROOT_UUID=$(blkid -s UUID -o value /dev/disk/by-partuuid/$(lsblk -no PARTUUID $(findmnt / -n -o SOURCE)))
-    cat <<EOL > /boot/loader/entries/arch.conf
+    cat <<EOL > /boot/efi/loader/entries/arch.conf
 title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /initramfs-linux.img
