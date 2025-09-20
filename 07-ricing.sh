@@ -39,7 +39,12 @@ for d in "$RICE_DIR/"*; do
 done
 
 # Ajustar permisos
-chown -R $USER:$USER "$USER_HOME/.config"
+arch-chroot /mnt /bin/bash <<EOF
+chown -R $USER:$USER /home/$USER/.config
+if [[ -d /home/$USER/wallpapers ]]; then
+    chown -R $USER:$USER /home/$USER/wallpapers
+fi
+EOF
 
 # Aplicar wallpaper si existe
 WALLPAPER_SRC="$CONFIGS_DIR/wallpaper.jpg"
