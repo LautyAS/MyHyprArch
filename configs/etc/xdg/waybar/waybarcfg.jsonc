@@ -8,16 +8,13 @@
     // Choose the order of the modules
     "modules-left": [
         "hyprland/workspaces",
-        //"sway/mode",
-        //"sway/scratchpad",
-        //"custom/media"
 	"custom/keyboard",
 	"custom/jp_mode"
     ],
    
     
     "custom/keyboard": {
-   	 "exec": "~/.config/waybar/scripts/keyboard_layout.sh",
+   	"exec": "~/.config/waybar/scripts/keyboard_layout.sh",
     	"interval": 1,
     	"on-click": "~/.config/waybar/scripts/keyboard_layout.sh click",
     	"format": "{text}"
@@ -60,12 +57,6 @@
     //     "warp-on-scroll": false,
          "format": "{name}: {icon}",
          "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
              "active": "",
              "default": ""
          }
