@@ -100,16 +100,25 @@ timeout 3
 editor 0
 EOL
 
-    ROOT_UUID=$(blkid -s UUID -o value /dev/disk/by-partuuid/$(lsblk -no PARTUUID $(findmnt / -n -o SOURCE)))
+    ROOT_UUID=\$(blkid -s UUID -o value /dev/disk/by-partuuid/\$(lsblk -no PARTUUID \$(findmnt / -n -o SOURCE)))
     cat <<EOL > /boot/efi/loader/entries/arch.conf
 title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /initramfs-linux.img
-options root=UUID=$ROOT_UUID rw
+options root=UUID=\$ROOT_UUID rw
 EOL
 else
-    pacman -S --noconfirm grub efibootmgr
-    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+    pacman -S --noconfirm grub
+
+    if [[ -d /sys/firmware/efi ]]; then
+        echo "UEFI detectado → instalando GRUB en EFI..."
+        pacman -S --noconfirm efibootmgr
+        grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+    else
+        echo "BIOS detectado → instalando GRUB en MBR..."
+        grub-install --target=i386-pc /dev/sda
+    fi
+
     grub-mkconfig -o /boot/grub/grub.cfg
 fi
 
