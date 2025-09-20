@@ -92,7 +92,8 @@ echo "/swapfile none swap sw 0 0" >> /etc/fstab
 # Instalar bootloader
 echo "Instalando bootloader $BOOTLOADER..."
 if [[ "$BOOTLOADER" == "systemd-boot" ]]; then
-    bootctl --path=/boot install
+    bootctl --path=/boot/efi install
+    chmod 700 /boot/efi
     cat <<EOL > /boot/loader/loader.conf
 default arch
 timeout 3
