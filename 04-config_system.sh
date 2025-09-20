@@ -4,6 +4,14 @@ set -e
 echo "=== 04 - Configuración del sistema ==="
 echo ""
 
+# Cargar disco elegido en 01-check_disk.sh
+if [[ -f /tmp/install_disk.sh ]]; then
+    source /tmp/install_disk.sh
+else
+    echo "No se encontró el archivo /tmp/install_disk.sh. Ejecuta primero 01-check_disk.sh"
+    exit 1
+fi
+
 # Cargar elección de bootloader
 if [[ -f /mnt/tmp_boot_choice.sh ]]; then
     source /mnt/tmp_boot_choice.sh
@@ -14,7 +22,6 @@ fi
 
 # ---- Solicitar usuario y contraseñas fuera del chroot ----
 read -rp "Ingrese el hostname del sistema: " HOSTNAME
-
 read -rp "Ingrese nombre de usuario: " USERNAME
 
 # Contraseña del usuario
@@ -49,6 +56,8 @@ esac
 arch-chroot /mnt /bin/bash <<EOF
 set -e
 
+INSTALL_DISK="$INSTALL_DISK"
+
 # Configurar hostname
 echo "$HOSTNAME" > /etc/hostname
 cat <<EOL > /etc/hosts
@@ -75,12 +84,8 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Zona horaria
 echo "Intentando detectar zona horaria..."
-TZ=$(timedatectl list-timezones | grep -i "$(curl -s ifconfig.me)" | head -n 1 || true)
-if [[ -z "$TZ" ]]; then
-    timedatectl list-timezones
-    read -rp "Ingrese su zona horaria (ej: America/Argentina/Buenos_Aires): " TZ
-fi
-timedatectl set-timezone "$TZ"
+timedatectl list-timezones | grep -q "America/Argentina/Buenos_Aires" && TZ="America/Argentina/Buenos_Aires" || TZ="UTC"
+timedatectl set-timezone "\$TZ"
 timedatectl set-ntp true
 
 # Habilitar NetworkManager
@@ -109,20 +114,17 @@ options root=UUID=\$ROOT_UUID rw
 EOL
 else
     pacman -S --noconfirm grub
-
     if [[ -d /sys/firmware/efi ]]; then
         echo "UEFI detectado → instalando GRUB en EFI..."
         pacman -S --noconfirm efibootmgr
         grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
     else
-        echo "BIOS detectado → instalando GRUB en MBR..."
-        grub-install --target=i386-pc /dev/sda
+        echo "BIOS detectado → instalando GRUB en MBR de \$INSTALL_DISK..."
+        grub-install --target=i386-pc "\$INSTALL_DISK"
     fi
-
     grub-mkconfig -o /boot/grub/grub.cfg
 fi
 
 EOF
 
 echo "Configuración completa. Ahora podés continuar con el script 05-install_desktop.sh."
-
