@@ -78,9 +78,8 @@ echo "Contraseña de root configurada."
 sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
 # Configurar locale
-echo "es_AR.UTF-8 UTF-8" >> /etc/locale.gen
+sed -i 's/^# %#en_US.UTF-8/%en_US.UTF-8' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Zona horaria
 echo "Intentando detectar zona horaria..."
