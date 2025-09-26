@@ -75,7 +75,7 @@ echo "root:$ROOTPASS" | chpasswd
 echo "Contraseña de root configurada."
 
 # Configurar sudo para el grupo wheel
-sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # Configurar locale
 sed -i 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
