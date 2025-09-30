@@ -19,7 +19,7 @@ grep -q "^ILoveCandy" "$CONFPM" || sed -i '/#Color/i ILoveCandy' "$CONFPM"
 sed -i 's/^#Color/Color/' "$CONFPM"
 sed -i 's/^#\?\s*ParallelDownloads *= *.*/ParallelDownloads = 10/' "$CONFPM"
 sed -i '/^\s*#\[multilib\]/s/^#//' "$CONFPM"
-sed -i '/*\[multilib\]/,/^$/s/^\(\s*\)#\s*\(Include = \/etc\/pacman.d\/mirrorlist\)/\1\2/' "$CONFPM"
+sed -i '/^\[multilib\]/,/^$/s/^\(\s*\)#\s*\(Include = \/etc\/pacman.d\/mirrorlist\)/\1\2/' "$CONFPM"
 
 arch-chroot /mnt /bin/bash <<'EOF'
 set -e
@@ -45,19 +45,19 @@ echo "4) (Ya lo manejaré yo) (Esta opción por lo general instala amkvlk como p
 read -p "Vendedor: " gpu_choice
 
 case "$gpu_choice" in
-	1)
+1)
 		echo "--> AMD Selected"
 		pacman -S --noconfirm vulkan-radeon lib32-vulkan-radeon
 		;;
-	2)
+2)
 		echo "--> Intel Selected"
 		pacman -S --noconfirm vulkan-intel lib32-vulkan-intel intel-media-driver
 		;;
-	3)
+3)
 		echo "--> Nvidia Selected"
 		pacman -S --noconfirm nvidia nvidia-utils lib32-nvidia-utils nvidia-settings
 		;;
-	*)
+*)
 		echo "--> Omitiendo instalación de drivers de GPU específicos"
 		;;
 esac
