@@ -13,13 +13,13 @@ else
 fi
 
 # Asegurar directorios
-USER_HOME="/home/$USERNAME"
+USER_HOME="/mnt/home/$USERNAME"
 mkdir -p "$USER_HOME/.config" "$USER_HOME/Pictures/wallpapers"
 
 # --- Copiar configs ---
 echo "Copiando configuraciones..."
 cp -r configs/.config/* "$USER_HOME/.config/"
-cp -r configs/etc/xdg/* /etc/xdg/
+cp -r configs/etc/xdg/* /mnt/etc/xdg/
 
 # --- Copiar wallpapers ---
 if [[ -d rice/wallpapers ]]; then
