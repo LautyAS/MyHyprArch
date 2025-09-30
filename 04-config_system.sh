@@ -23,6 +23,7 @@ fi
 # ---- Solicitar usuario y contraseñas fuera del chroot ----
 read -rp "Ingrese el hostname del sistema: " HOSTNAME
 read -rp "Ingrese nombre de usuario: " USERNAME
+echo "USERNAME=$USERNAME" > /mnt/tmp_install_vars.sh
 
 # Contraseña del usuario
 while true; do
