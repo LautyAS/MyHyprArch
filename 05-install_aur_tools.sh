@@ -11,7 +11,7 @@ if [[ ! -d /mnt ]]; then
 fi
 
 echo "Haciendo backup de la configuración de pacman..."
-CONFPM = "/mnt/etc/pacman.conf"
+CONFPM="/mnt/etc/pacman.conf"
 cp "$CONFPM" "${CONFPM}.bak"
 
 echo "Configurando pacman..."
@@ -31,7 +31,7 @@ echo "instalando paru aur helper..."
 
 git clone https://aur.archlinux.org/paru-bin.git
 cd paru-bin
-makepkg -si
+makepkg -si --noconfirm
 cd ..
 rm -rf paru-bin
 
@@ -47,15 +47,15 @@ read -p "Vendedor: " gpu_choice
 case "$gpu_choice" in
 	1)
 		echo "--> AMD Selected"
-		sudo pacman -S --noconfirm vulkan-radeon lib32-vulkan-radeon
+		pacman -S --noconfirm vulkan-radeon lib32-vulkan-radeon
 		;;
 	2)
 		echo "--> Intel Selected"
-		sudo pacman -S --noconfirm vulkan-intel lib32-vulkan-intel intel-media-driver
+		pacman -S --noconfirm vulkan-intel lib32-vulkan-intel intel-media-driver
 		;;
 	3)
 		echo "--> Nvidia Selected"
-		sudo pacman -S --noconfirm nvidia nvidia-utils lib32-nvidia-utils nvidia-settings
+		pacman -S --noconfirm nvidia nvidia-utils lib32-nvidia-utils nvidia-settings
 		;;
 	*)
 		echo "--> Omitiendo instalación de drivers de GPU específicos"
