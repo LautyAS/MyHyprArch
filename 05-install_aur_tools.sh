@@ -29,11 +29,11 @@ pacman -Syu git base-devel --needed --noconfirm
 
 echo "instalando paru aur helper..."
 
-git clone https://aur.archlinux.org/paru-bin.git
-cd paru-bin
-makepkg -si --noconfirm
-cd ..
-rm -rf paru-bin
+#git clone https://aur.archlinux.org/paru-bin.git
+#cd paru-bin
+#makepkg -si --noconfirm
+#cd ..
+#rm -rf paru-bin
 
 echo -e "Instalación de controladores gráficos...\n"
 
@@ -63,9 +63,9 @@ case "$gpu_choice" in
 esac
 
 echo "Instalando Hyprland y utilidades..."
-paru -S --noconfirm \
+pacman -S --noconfirm \
     hyprland hyprpaper kitty waybar wofi ly \
-    firefox floorp-bin \
+    firefox \
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools \
     polkit polkit-gnome \
