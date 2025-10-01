@@ -68,6 +68,7 @@ pacman -S --noconfirm \
     firefox \
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools \
+	fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
     polkit polkit-gnome \
     nm-connection-editor \
     htop fastfetch \
