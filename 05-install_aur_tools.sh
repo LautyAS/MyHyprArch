@@ -24,16 +24,25 @@ sed -i '/^\[multilib\]/,/^$/s/^\(\s*\)#\s*\(Include = \/etc\/pacman.d\/mirrorlis
 arch-chroot /mnt /bin/bash <<'EOF'
 set -e
 
+echo "=== Verificando integridad del keyring de pacman ==="
+
+if [[ ! -d /etc/pacman.d/gnupg || -z "$(ls -A /etc/pacman.d/gnupg 2>/dev/null)" ]]; then
+    echo "⚠️  El keyring está vacío o no existe. Regenerando..."
+    rm -rf /etc/pacman.d/gnupg
+    pacman-key --init
+    pacman-key --populate archlinux
+else
+    echo "✔️  Keyring encontrado, refrescando claves..."
+    chmod 700 /etc/pacman.d/gnupg
+    pacman-key --refresh-keys || {
+        echo "⚠️  No se pudo refrescar correctamente, reinstalando keyring..."
+        pacman -Sy --noconfirm archlinux-keyring
+        pacman-key --populate archlinux
+    }
+fi
+
 echo "Actualizando repositorios..."
-pacman -Syu git base-devel --needed --noconfirm
-
-echo "instalando paru aur helper..."
-
-#git clone https://aur.archlinux.org/paru-bin.git
-#cd paru-bin
-#makepkg -si --noconfirm
-#cd ..
-#rm -rf paru-bin
+pacman -Syu git base-devel archlinux-keyring --noconfirm
 
 echo -e "Instalación de controladores gráficos...\n"
 
