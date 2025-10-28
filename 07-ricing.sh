@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-echo "=== 07 - Ricing inicial ==="
+echo "=== 07 - Ricing inicial (modo chroot-safe) ==="
 echo ""
 
-# Levantar variables guardadas
+# --- Levantar variables ---
 if [[ -f /mnt/tmp_install_vars.sh ]]; then
     source /mnt/tmp_install_vars.sh
 else
@@ -14,50 +14,64 @@ fi
 
 USER_HOME="/mnt/home/$USERNAME"
 
-# Crear directorios de usuario
-mkdir -p "$USER_HOME/.config" "$USER_HOME/Pictures/wallpapers"
+# --- Copiar configs al sistema instalado ---
+echo "Preparando archivos para copiar dentro del chroot..."
+mkdir -p /mnt/root/configs-temp
+cp -r configs/* /mnt/root/configs-temp/
+echo "✅ Archivos copiados temporalmente en /root/configs-temp."
 
-# --- Copiar configuraciones del usuario ---
-echo "Copiando configuraciones personales..."
-cp -r configs/.config/* "$USER_HOME/.config/" 2>/dev/null || true
+# --- Entrar al chroot y aplicar ricing ---
+arch-chroot /mnt /bin/bash <<EOF
+set -e
+echo ""
+echo "Aplicando ricing dentro del sistema instalado..."
+echo ""
+
+USER_HOME="/home/$USERNAME"
+
+# Crear carpetas si no existen
+mkdir -p "\$USER_HOME/.config" "\$USER_HOME/Pictures/wallpapers"
+
+# --- Copiar configuraciones ---
+echo "Copiando configuraciones de usuario..."
+cp -r /root/configs-temp/.config/* "\$USER_HOME/.config/" 2>/dev/null || true
+
+# --- Copiar configuraciones globales ---
+if [[ -d /root/configs-temp/etc/xdg ]]; then
+    cp -r /root/configs-temp/etc/xdg/* /etc/xdg/
+    echo "✅ Configuraciones globales copiadas."
+fi
 
 # --- Copiar wallpapers ---
-if [[ -d rice/wallpapers ]]; then
-    cp -r rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
+if [[ -d /root/configs-temp/rice/wallpapers ]]; then
+    cp -r /root/configs-temp/rice/wallpapers/* "\$USER_HOME/Pictures/wallpapers/"
     echo "✅ Wallpapers copiados."
 else
-    echo "⚠️ No se encontró la carpeta rice/wallpapers."
+    echo "⚠️ No se encontró /root/configs-temp/rice/wallpapers."
 fi
 
 # --- Fcitx5 autostart ---
-AUTOSTART="$USER_HOME/.config/hypr/autostart.conf"
-mkdir -p "$(dirname "$AUTOSTART")"
-if ! grep -q "fcitx5" "$AUTOSTART" 2>/dev/null; then
-    echo "fcitx5 &" >> "$AUTOSTART"
+AUTOSTART="\$USER_HOME/.config/hypr/autostart.conf"
+mkdir -p "\$(dirname "\$AUTOSTART")"
+if ! grep -q "fcitx5" "\$AUTOSTART" 2>/dev/null; then
+    echo "fcitx5 &" >> "\$AUTOSTART"
     echo "✅ Se agregó fcitx5 al autostart."
 fi
 
-# --- Aplicar configuraciones globales dentro del chroot ---
-arch-chroot /mnt /bin/bash <<EOF
-set -e
-echo "Aplicando configuraciones globales (xdg, etc)..."
-
-# Copiar configuraciones de /etc/xdg
-if [[ -d /configs/etc/xdg ]]; then
-    sudo cp -r /configs/etc/xdg/* /etc/xdg/
-    echo "✅ Configs globales copiadas."
+# --- Permisos ---
+if id "$USERNAME" &>/dev/null; then
+    chown -R "$USERNAME:$USERNAME" "\$USER_HOME/.config" "\$USER_HOME/Pictures"
+    echo "✅ Permisos corregidos para $USERNAME."
 else
-    echo "⚠️ No se encontró /configs/etc/xdg dentro del chroot."
+    echo "⚠️ Usuario $USERNAME no encontrado, se omitió el chown."
 fi
 
-# Asegurar permisos de usuario
-#if id "$USERNAME" &>/dev/null; then
-#    chown -R "$USERNAME:$USERNAME" "/home/$USERNAME/.config" "/home/$USERNAME/Pictures"
-#    echo "✅ Permisos corregidos para $USERNAME."
-#else
-#    echo "⚠️ Usuario $USERNAME no encontrado en el sistema, se omitió el chown."
-#fi
+# --- Limpiar temporal ---
+rm -rf /root/configs-temp
+echo "🧹 Limpieza completada."
+
+echo "✨ Ricing aplicado exitosamente dentro del chroot."
 EOF
 
-echo "✨ Ricing aplicado correctamente."
-
+echo ""
+echo "✅ Ricing finalizado. El keyring no debería verse afectado."
