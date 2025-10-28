@@ -7,7 +7,7 @@ echo "=== Iniciando instalación de Arch Linux con Hyprland ==="
 ./02-format_mount.sh
 ./03-install_base.sh
 ./04-config_system.sh
-./05-install_aur_tools.sh
+./05-hyprland.sh
 ./06-post_install.sh
 ./07-ricing.sh
 
