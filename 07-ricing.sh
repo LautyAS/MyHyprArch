@@ -44,19 +44,19 @@ echo "Aplicando configuraciones globales (xdg, etc)..."
 
 # Copiar configuraciones de /etc/xdg
 if [[ -d /configs/etc/xdg ]]; then
-    cp -r /configs/etc/xdg/* /etc/xdg/
+    sudo cp -r /configs/etc/xdg/* /etc/xdg/
     echo "✅ Configs globales copiadas."
 else
     echo "⚠️ No se encontró /configs/etc/xdg dentro del chroot."
 fi
 
 # Asegurar permisos de usuario
-if id "$USERNAME" &>/dev/null; then
-    chown -R "$USERNAME:$USERNAME" "/home/$USERNAME/.config" "/home/$USERNAME/Pictures"
-    echo "✅ Permisos corregidos para $USERNAME."
-else
-    echo "⚠️ Usuario $USERNAME no encontrado en el sistema, se omitió el chown."
-fi
+#if id "$USERNAME" &>/dev/null; then
+#    chown -R "$USERNAME:$USERNAME" "/home/$USERNAME/.config" "/home/$USERNAME/Pictures"
+#    echo "✅ Permisos corregidos para $USERNAME."
+#else
+#    echo "⚠️ Usuario $USERNAME no encontrado en el sistema, se omitió el chown."
+#fi
 EOF
 
 echo "✨ Ricing aplicado correctamente."
