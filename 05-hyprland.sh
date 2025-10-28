@@ -33,13 +33,17 @@ if ! command -v fzf &>/dev/null; then
     pacman -Sy --noconfirm fzf
 fi
 
-# Listar zonas disponibles
+echo ""
+echo "🕓 Selección de zona horaria"
+echo "Usa ↑ ↓ para moverte, escribe para filtrar, y presiona Enter para seleccionar."
+sleep 2
+
 timezone=$(find /usr/share/zoneinfo -type f | sed 's|/usr/share/zoneinfo/||' | fzf --prompt="Seleccione su zona horaria: " --height=40% --border --ansi)
 
-if [[ -n "\$timezone" ]]; then
-    ln -sf "/usr/share/zoneinfo/\$timezone" /etc/localtime
+if [[ -n "$timezone" ]]; then
+    ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime
     hwclock --systohc
-    echo "Zona horaria configurada en: \$timezone"
+    echo "Zona horaria configurada en: $timezone"
 else
     echo "No se seleccionó ninguna zona horaria, se usará UTC por defecto."
     ln -sf /usr/share/zoneinfo/UTC /etc/localtime
@@ -49,7 +53,7 @@ fi
 echo ""
 echo "=== Verificando y reparando el keyring ==="
 
-if [[ ! -d /etc/pacman.d/gnupg || -z \$(ls -A /etc/pacman.d/gnupg 2>/dev/null) ]]; then
+if [[ ! -d /etc/pacman.d/gnupg || -z $(ls -A /etc/pacman.d/gnupg 2>/dev/null) ]]; then
     echo "El keyring de pacman parece vacío o ausente. Regenerando..."
     rm -rf /etc/pacman.d/gnupg
     pacman-key --init
@@ -77,9 +81,14 @@ if ! command -v fzf &>/dev/null; then
     pacman -Sy --noconfirm fzf
 fi
 
+echo ""
+echo "🎮 Selección de controladores gráficos"
+echo "Usa ↑ ↓ para moverte, escribe para filtrar, y presiona Enter para seleccionar."
+sleep 2
+
 gpu_choice=$(printf "AMD\nIntel\nNVIDIA\nOmitir" | fzf --prompt="Seleccione el fabricante de su GPU: " --height=40% --border --ansi)
 
-case "\$gpu_choice" in
+case "$gpu_choice" in
     "AMD")
         echo "→ Instalando controladores AMD..."
         pacman -S --noconfirm vulkan-radeon lib32-vulkan-radeon
