@@ -24,6 +24,22 @@ sed -i '/^\[multilib\]/,/^$/s/^\(\s*\)#\s*\(Include = \/etc\/pacman.d\/mirrorlis
 arch-chroot /mnt /bin/bash <<'EOF'
 set -e
 
+echo "=== Configuración de zona horaria ==="
+echo ""
+echo "Ejemplo: America/Argentina/Buenos_Aires"
+echo "Puede listar todas las zonas disponibles con:"
+echo "  timedatectl list-timezones | less"
+echo ""
+read -p "Ingrese su zona horaria: " tz
+
+if timedatectl list-timezones | grep -qx "$tz"; then
+    timedatectl set-timezone "$tz"
+    echo "✔️ Zona horaria configurada en: $tz"
+else
+    echo "⚠️ Zona no válida, manteniendo configuración por defecto (UTC)"
+fi
+
+echo ""
 echo "=== Verificando integridad del keyring de pacman ==="
 
 if [[ ! -d /etc/pacman.d/gnupg || -z "$(ls -A /etc/pacman.d/gnupg 2>/dev/null)" ]]; then
@@ -41,6 +57,7 @@ else
     }
 fi
 
+echo ""
 echo "Actualizando repositorios..."
 pacman -Syu git base-devel archlinux-keyring --noconfirm
 
@@ -50,7 +67,7 @@ echo -e "Seleccione el fabricante de su GPU:\n"
 echo "1) AMD"
 echo "2) Intel"
 echo "3) NVidia"
-echo "4) (Ya lo manejaré yo) (Esta opción por lo general instala amkvlk como predeterminado)"
+echo "4) (Ya lo manejaré yo)"
 read -p "Vendedor: " gpu_choice
 
 case "$gpu_choice" in
