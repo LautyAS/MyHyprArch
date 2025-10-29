@@ -18,38 +18,8 @@ pacstrap /mnt base linux linux-firmware sof-firmware neovim sudo git networkmana
 echo "Generando fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# Detectar si el sistema arranca en UEFI o BIOS
-if [[ -d /sys/firmware/efi ]]; then
-    echo "Sistema detectado con UEFI."
-    echo "Seleccione el bootloader a instalar:"
-    echo "1) systemd-boot (simple y transparente)"
-    echo "2) GRUB (dual-boot y más robusto)"
-    while true; do
-        read -rp "Opción [1/2]: " BOOTCHOICE
-        case "$BOOTCHOICE" in
-            1)
-                echo "systemd-boot seleccionado"
-                echo "BOOTLOADER=systemd-boot" > /mnt/tmp_boot_choice.sh
-                mount --bind /sys /mnt/sys
-                mount --bind /proc /mnt/proc
-                mount --bind /dev /mnt/dev
-                mount --bind /run /mnt/run
-                break
-                ;;
-            2)
-                echo "GRUB seleccionado"
-                echo "BOOTLOADER=grub" > /mnt/tmp_boot_choice.sh
-                break
-                ;;
-            *)
-                echo "Opción inválida, intenta de nuevo."
-                ;;
-        esac
-    done
-else
-    echo "Sistema detectado con BIOS/Legacy. Se instalará GRUB automáticamente."
-    echo "BOOTLOADER=grub" > /mnt/tmp_boot_choice.sh
-fi
+# bootloader
+echo "BOOTLOADER=grub" > /mnt/tmp_boot_choice.sh
 
 echo ""
 echo "Instalación base completada."
