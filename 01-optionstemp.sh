@@ -10,7 +10,9 @@ select_fzf() {
 
 # --- Selección de disco ---
 echo "Seleccione el disco para la instalación:"
-DISK=$(lsblk -d -o NAME,SIZE,MODEL | grep -v "loop" | select_fzf "Disco")
+DISK=$(lsblk -d -o NAME,SIZE,MODEL | grep -v "loop" | awk '{print "/dev/" $1 " (" $2 ", " $3 ")"}' | fzf --height 10 --prompt="Disco: ")
+# Extraer solo el nombre del disco
+DISK=$(echo "$DISK" | awk -F'[ /()]+' '{print $2}')
 DISK="/dev/$DISK"
 echo "Disco seleccionado: $DISK"
 
@@ -20,20 +22,24 @@ echo "Usuario: $USERNAME"
 
 # --- Selección de locale ---
 echo "Seleccione el locale principal:"
-LOCALE=$(grep -v '^#' /etc/locale.gen | select_fzf "Locale")
+LOCALE=$(grep -v '^#' /etc/locale.gen | awk '{$1=$1};1' | fzf --height 15 --prompt="Locale: ")
 echo "Locale seleccionado: $LOCALE"
 
 # --- Selección de zona horaria ---
 echo "Seleccione la zona horaria:"
-TIMEZONE=$(find /usr/share/zoneinfo -type f | sed 's|/usr/share/zoneinfo/||' | select_fzf "Zona horaria")
+TIMEZONE=$(find /usr/share/zoneinfo -type f \
+    ! -path "*/posix*" \
+    ! -path "*/right*" \
+    ! -path "*/Etc/*" | \
+    sed 's|/usr/share/zoneinfo/||' | fzf --height 20 --prompt="Zona horaria: ")
 echo "Zona horaria seleccionada: $TIMEZONE"
 
 # --- Selección de GPU ---
 echo "Seleccione el fabricante de su GPU:"
-GPU=$(printf "AMD\nIntel\nNvidia\nOmitir" | select_fzf "GPU")
+GPU=$(printf "AMD\nIntel\nNvidia\nOmitir\n" | fzf --height 10 --prompt="GPU: ")
 echo "GPU seleccionado: $GPU"
 
-# --- Guardar variables ---
+# --- Guardar variables para los otros scripts ---
 cat <<EOF > /tmp_install_vars.sh
 USERNAME="$USERNAME"
 DISK="$DISK"
