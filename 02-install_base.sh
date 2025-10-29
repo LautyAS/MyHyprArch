@@ -47,14 +47,6 @@ mount "$ROOT_PART" /mnt
 mkdir -p /mnt/boot/efi
 mount "$EFI_PART" /mnt/boot/efi
 
-# --- Crear swapfile ---
-echo "🧠 Creando swapfile de tamaño $SWAP_SIZE..."
-fallocate -l "$SWAP_SIZE" /mnt/swapfile
-chmod 600 /mnt/swapfile
-mkswap /mnt/swapfile
-swapon /mnt/swapfile
-echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
-
 # --- Mirrors ---
 echo "🌐 Actualizando mirrors más rápidos..."
 reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
@@ -66,6 +58,14 @@ pacstrap /mnt base base-devel linux linux-firmware linux-headers vim sudo networ
 # --- fstab ---
 echo "🗂️ Generando fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
+
+# --- Crear swapfile ---
+echo "🧠 Creando swapfile de tamaño $SWAP_SIZE..."
+fallocate -l "$SWAP_SIZE" /mnt/swapfile
+chmod 600 /mnt/swapfile
+mkswap /mnt/swapfile
+swapon /mnt/swapfile
+echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
 
 # --- Variables ---
 cp /tmp/install_vars.sh /mnt/tmp_install_vars.sh
