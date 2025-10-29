@@ -40,8 +40,8 @@ mkdir -p "$USER_HOME/.config" "$USER_HOME/Pictures/wallpapers"
 
 # --- Copiar configuraciones ---
 
-echo "Se elimina posible configuracion corrupta de waybar"
-rm "@USER_HOME/.config/waybar/config"
+#echo "Se elimina posible configuracion corrupta de waybar"
+#rm "@USER_HOME/.config/waybar/config"
 
 echo "📁 Copiando configuraciones..."
 if [[ -d /root/configs/.config ]]; then
