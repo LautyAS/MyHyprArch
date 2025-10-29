@@ -7,6 +7,10 @@ echo "=== Iniciando instalación de Arch Linux con Hyprland ==="
 ./02-install_base.sh
 ./03-config.sh
 ./04-hyprland.sh
+
+cp -r rice/* /mnt/root/rice
+cp -r configs/* /mnt/root/configs
+
 ./05-ricing.sh
 
 echo "=== Instalación finalizada! ==="
