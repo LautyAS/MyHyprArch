@@ -10,6 +10,10 @@ if [[ ! -d /mnt ]]; then
     exit 1
 fi
 
+echo "Haciendo backup de la configuración de pacman..."
+CONFPM="/mnt/etc/pacman.conf"
+cp "$CONFPM" "${CONFPM}.bak"
+
 echo "Configurando pacman..."
 grep -q "^ILoveCandy" "$CONFPM" || sed -i '/#Color/i ILoveCandy' "$CONFPM"
 sed -i 's/^#Color/Color/' "$CONFPM"
@@ -56,10 +60,6 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 echo "🔌 Habilitando NetworkManager..."
 systemctl enable NetworkManager
-
-echo "Haciendo backup de la configuración de pacman..."
-CONFPM="/mnt/etc/pacman.conf"
-cp "$CONFPM" "${CONFPM}.bak"
 
 echo "🎮 Instalando paquetes específicos para GPU..."
 case "$GPU" in
