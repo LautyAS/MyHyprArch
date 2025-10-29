@@ -7,6 +7,7 @@ echo ""
 # --- Detectar si estamos dentro del sistema o en el live ---
 if [[ -d /mnt/root && "$(realpath /)" == "/" ]]; then
     echo "📦 Ejecutando dentro del live, entrando al chroot..."
+    cp 07-ricing.sh /mnt/root/
     arch-chroot /mnt /bin/bash /root/07-ricing.sh
     exit 0
 fi
@@ -43,8 +44,11 @@ if [[ -d /root/configs/.config ]]; then
     cp -r /root/configs/.config/* "$USER_HOME/.config/" 2>/dev/null || true
 fi
 
-if [[ -d /root/configs/etc/xdg ]]; then
-    cp -r /root/configs/etc/xdg/* /etc/xdg/ 2>/dev/null || true
+#if [[ -d /root/configs/etc/xdg ]]; then
+#    cp -r /root/configs/etc/xdg/* /etc/xdg/ 2>/dev/null || true
+#fi
+if [[ -d /root/configs/etx/xdg ]]; then
+    cp -r /root/configs/etc/xdg/* "$USER_HOME/.config" 2>/dev/null || true
 fi
 
 # --- Copiar wallpapers ---
@@ -67,7 +71,7 @@ else
 fi
 
 # --- Permisos ---
-chown -R "$USERNAME:$USERNAME" "$USER_HOME/.config" "$USER_HOME/Pictures"
+#chown -R "$USERNAME:$USERNAME" "$USER_HOME/.config" "$USER_HOME/Pictures"
 
 echo ""
 echo "✨ Ricing aplicado correctamente dentro del sistema."
