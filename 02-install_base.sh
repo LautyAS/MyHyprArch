@@ -22,15 +22,15 @@ if [[ "$confirm" != "s" ]]; then
     exit 1
 fi
 
-# --- Particionado ---
-echo "🧹 Limpiando disco..."
-sgdisk --zap-all "$DISK"
-
-echo "🧱 Creando particiones GPT..."
+# Crear tabla de particiones GPT
 parted -s "$DISK" mklabel gpt
-parted -s "$DISK" mkpart ESP fat32 1MiB 512MiB
+
+# Crear partición EFI (512 MiB)
+parted -s "$DISK" mkpart primary fat32 1MiB 513MiB
 parted -s "$DISK" set 1 esp on
-parted -s "$DISK" mkpart primary ext4 512MiB 100%
+
+# Crear partición raíz (resto del disco)
+parted -s "$DISK" mkpart primary ext4 513MiB 100%
 
 EFI_PART="${DISK}1"
 ROOT_PART="${DISK}2"
