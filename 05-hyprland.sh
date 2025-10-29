@@ -51,24 +51,6 @@ else
 fi
 
 echo ""
-echo "=== Verificando y reparando el keyring ==="
-
-if [[ ! -d /etc/pacman.d/gnupg || -z $(ls -A /etc/pacman.d/gnupg 2>/dev/null) ]]; then
-    echo "El keyring de pacman parece vacío o ausente. Regenerando..."
-    rm -rf /etc/pacman.d/gnupg
-    pacman-key --init
-    pacman-key --populate archlinux
-else
-    echo "Keyring encontrado. Refrescando claves..."
-    pacman-key --refresh-keys || {
-        echo "Error al refrescar claves. Forzando regeneración..."
-        rm -rf /etc/pacman.d/gnupg
-        pacman-key --init
-        pacman-key --populate archlinux
-    }
-fi
-
-echo ""
 echo "=== Actualizando repositorios ==="
 pacman -Syu git base-devel archlinux-keyring --noconfirm
 
