@@ -15,12 +15,16 @@ source /tmp/install_vars.sh
 SWAP_SIZE="${SWAP_SIZE:-4G}"
 
 # --- Confirmar disco ---
-echo "El disco seleccionado es: $DISK"
-read -rp "¿Deseas continuar y borrar TODO su contenido? (s/n): " confirm
-if [[ "$confirm" != "s" ]]; then
-    echo "Instalación cancelada."
-    exit 1
-fi
+read -rp "Esto borrará todo en $INSTALL_DISK. Continuar? [y/N]: " CONFIRM
+case "$CONFIRM" in
+    [yY][eE][sS]|[yY]) 
+        echo "Procediendo con el formateo..."
+        ;;
+    *)
+        echo "Abortando."
+        exit 1
+        ;;
+esac
 
 # Crear tabla de particiones GPT
 parted -s "$DISK" mklabel gpt
@@ -32,9 +36,9 @@ parted -s "$DISK" set 1 esp on
 # Crear partición raíz (resto del disco)
 parted -s "$DISK" mkpart primary ext4 513MiB 100%
 
+# Asignar variables a particiones
 EFI_PART="${DISK}1"
 ROOT_PART="${DISK}2"
-[[ "$DISK" == *"nvme"* ]] && EFI_PART="${DISK}p1" && ROOT_PART="${DISK}p2"
 
 # --- Formatear ---
 echo "💾 Formateando particiones..."
@@ -47,24 +51,32 @@ mount "$ROOT_PART" /mnt
 mkdir -p /mnt/boot/efi
 mount "$EFI_PART" /mnt/boot/efi
 
+# Crear swapfile de 4G dentro de la raíz
+SWAPFILE_SIZE=4G
+echo "Creando swapfile de $SWAPFILE_SIZE..."
+fallocate -l $SWAPFILE_SIZE /mnt/swapfile
+chmod 600 /mnt/swapfile
+mkswap /mnt/swapfile
+swapon /mnt/swapfile
+
 # --- Mirrors ---
 echo "🌐 Actualizando mirrors más rápidos..."
 reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
 # --- Instalación base ---
 echo "📦 Instalando sistema base..."
-pacstrap /mnt base base-devel linux linux-firmware linux-headers vim sudo networkmanager grub efibootmgr git reflector
+pacstrap /mnt base base-devel linux linux-firmware linux-headers neovim sudo networkmanager grub efibootmgr git reflector
 
 # --- fstab ---
 echo "🗂️ Generando fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # --- Crear swapfile ---
-echo "🧠 Creando swapfile de tamaño $SWAP_SIZE..."
-fallocate -l "$SWAP_SIZE" /mnt/swapfile
-chmod 600 /mnt/swapfile
-mkswap /mnt/swapfile
-swapon /mnt/swapfile
+#echo "🧠 Creando swapfile de tamaño $SWAP_SIZE..."
+#fallocate -l "$SWAP_SIZE" /mnt/swapfile
+#chmod 600 /mnt/swapfile
+#mkswap /mnt/swapfile
+#swapon /mnt/swapfile
 echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
 
 # --- Variables ---
