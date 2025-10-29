@@ -99,7 +99,6 @@ echo "Instalando bootloader GRUB..."
         grub-install --target=i386-pc "\$INSTALL_DISK"
     fi
     grub-mkconfig -o /boot/grub/grub.cfg
-fi
 
 EOF
 
