@@ -79,6 +79,19 @@ case "$GPU" in
         ;;
 esac
 
+# Instalar bootloader
+echo "Instalando bootloader GRUB..."
+    pacman -S --noconfirm grub
+    if [[ -d /sys/firmware/efi ]]; then
+        echo "UEFI detectado → instalando GRUB en EFI..."
+        pacman -S --noconfirm efibootmgr
+        grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+    else
+        echo "BIOS detectado → instalando GRUB en MBR de \$INSTALL_DISK..."
+        grub-install --target=i386-pc "\$INSTALL_DISK"
+    fi
+    grub-mkconfig -o /boot/grub/grub.cfg
+
 echo "✅ Configuración del sistema base completada."
 echo "💡 Próximo paso: ejecutar los scripts de rice y personalización del usuario."
 EOF
