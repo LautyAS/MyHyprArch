@@ -26,7 +26,7 @@ else
 fi
 
 # Entrar al nuevo sistema y hacer limpieza y preparativos
-arch-chroot /mnt /bin/bash <<'EOF'
+arch-chroot /mnt /bin/bash <<EOF
 set -e
 
 echo "Limpiando paquetes huérfanos..."
