@@ -66,9 +66,23 @@ if [[ "$PASSWORD" != "$PASSWORD2" ]]; then
     exit 1
 fi
 
-# --- Zona horaria ---
-#TIMEZONE_OPTIONS=("America/Argentina/Buenos_Aires" "America/Santiago" "America/Mexico_City" "Europe/Madrid" "UTC")
-#TIMEZONE=$(select_option "🌎 Selecciona tu zona horaria" "${TIMEZONE_OPTIONS[@]}")
+# --- Contraseña root ---
+read -rp "¿Desea que root tenga la misma contraseña que $USERNAME? [y/N]: " SAMEPASS
+case "$SAMEPASS" in
+    [yY][eE][sS]|[yY])
+        ROOTPASS="$USERPASS"
+        ;;
+    *)
+        while true; do
+            read -srp "Ingrese contraseña para root: " ROOTPASS
+            echo ""
+            read -srp "Confirme contraseña root: " ROOTPASS2
+            echo ""
+            [[ "$ROOTPASS" == "$ROOTPASS2" ]] && break
+            echo "Las contraseñas no coinciden, intente de nuevo."
+        done
+        ;;
+esac
 
 echo "Seleccione la zona horaria:"
 TIMEZONE=$(find /usr/share/zoneinfo -type f \
@@ -76,17 +90,11 @@ TIMEZONE=$(find /usr/share/zoneinfo -type f \
     | fzf --prompt="Seleccione su zona horaria: " --height=40% --border --ansi)
 echo "Zona horaria seleccionada: $TIMEZONE"
 
+ --- Idioma del sistema ---
+LOCALE_OPTIONS=("es_AR.UTF-8" "es_ES.UTF-8" "en_US.UTF-8")
+LOCALE=$(select_option "🗣️  Selecciona el idioma del sistema" "${LOCALE_OPTIONS[@]}")
 
-# --- Idioma del sistema ---
-#LOCALE_OPTIONS=("es_AR.UTF-8" "es_ES.UTF-8" "en_US.UTF-8")
-#LOCALE=$(select_option "🗣️  Selecciona el idioma del sistema" "${LOCALE_OPTIONS[@]}")
-
-# --- GPU ---
-#GPU_OPTIONS=("AMD" "Intel" "NVIDIA" "VM/Genérica (sin GPU dedicada)")
-#GPU=$(select_option "🎮 Selecciona tu tipo de GPU" "${GPU_OPTIONS[@]}")
-
-
-echo "Seleccione el fabricante de su GPU:"
+ --- GPU ---
 GPU=$(printf "AMD\nIntel\nNvidia\nOmitir\n" | fzf --height=10 --border --prompt="GPU: ")
 echo "GPU seleccionado: $GPU"
 
@@ -112,6 +120,7 @@ DISK="$DISK"
 USERNAME="$USERNAME"
 HOSTNAME="$HOSTNAME"
 PASSWORD="$PASSWORD"
+ROOTPASS="$ROOTPASS"
 TIMEZONE="$TIMEZONE"
 LOCALE="$LOCALE"
 GPU="$GPU"
