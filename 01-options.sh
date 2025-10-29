@@ -50,11 +50,11 @@ lsblk -dpno NAME,SIZE | grep -E "/dev/sd|/dev/nvme"
 echo ""
 read -rp "👉 Escribe el disco donde se instalará Arch (ej: /dev/sda, /dev/nvme0n1): " DISK
 
-# --- Nombre de usuario ---
-read -rp "👤 Ingresa el nombre de usuario: " USERNAME
-
 # --- Nombre del host ---
 read -rp "💻 Ingresa el nombre del equipo (hostname): " HOSTNAME
+
+# --- Nombre de usuario ---
+read -rp "👤 Ingresa el nombre de usuario: " USERNAME
 
 # --- Contraseña del usuario ---
 read -rsp "🔑 Ingresa la contraseña del usuario: " PASSWORD
@@ -67,7 +67,7 @@ if [[ "$PASSWORD" != "$PASSWORD2" ]]; then
 fi
 
 # --- Contraseña root ---
-read -rp "¿Desea que root tenga la misma contraseña que $USERNAME? [y/N]: " SAMEPASS
+read -rp "    ¿Desea que root tenga la misma contraseña que $USERNAME? [y/N]: " SAMEPASS
 case "$SAMEPASS" in
     [yY][eE][sS]|[yY])
         ROOTPASS="$USERPASS"
@@ -90,11 +90,11 @@ TIMEZONE=$(find /usr/share/zoneinfo -type f \
     | fzf --prompt="Seleccione su zona horaria: " --height=40% --border --ansi)
 echo "Zona horaria seleccionada: $TIMEZONE"
 
- --- Idioma del sistema ---
+# --- Idioma del sistema ---
 LOCALE_OPTIONS=("es_AR.UTF-8" "es_ES.UTF-8" "en_US.UTF-8")
 LOCALE=$(select_option "🗣️  Selecciona el idioma del sistema" "${LOCALE_OPTIONS[@]}")
 
- --- GPU ---
+# --- GPU ---
 GPU=$(printf "AMD\nIntel\nNvidia\nOmitir\n" | fzf --height=10 --border --prompt="GPU: ")
 echo "GPU seleccionado: $GPU"
 
@@ -108,8 +108,8 @@ echo "  Zona horaria:   $TIMEZONE"
 echo "  Locale:         $LOCALE"
 echo "  GPU:            $GPU"
 echo ""
-read -rp "¿Confirmar y guardar configuración? (s/n): " CONFIRM
-if [[ "$CONFIRM" != "s" ]]; then
+read -rp "¿Confirmar y guardar configuración? (y/N): " CONFIRM
+if [[ "$CONFIRM" != "y" || "$CONFIRM" == "Y" ]]; then
     echo "Instalación cancelada."
     exit 0
 fi
