@@ -50,16 +50,27 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 echo "🔌 Habilitando NetworkManager..."
 systemctl enable NetworkManager
 
+echo "Haciendo backup de la configuración de pacman..."
+CONFPM="/mnt/etc/pacman.conf"
+cp "$CONFPM" "${CONFPM}.bak"
+
+echo "Configurando pacman..."
+grep -q "^ILoveCandy" "$CONFPM" || sed -i '/#Color/i ILoveCandy' "$CONFPM"
+sed -i 's/^#Color/Color/' "$CONFPM"
+sed -i 's/^#\?\s*ParallelDownloads *= *.*/ParallelDownloads = 10/' "$CONFPM"
+sed -i '/^\s*#\[multilib\]/s/^#//' "$CONFPM"
+sed -i '/^\[multilib\]/,/^$/s/^\(\s*\)#\s*\(Include = \/etc\/pacman.d\/mirrorlist\)/\1\2/' "$CONFPM"
+
 echo "🎮 Instalando paquetes específicos para GPU..."
 case "$GPU" in
     AMD)
         pacman -S --noconfirm vulkan-radeon lib32-vulkan-radeon
         ;;
     Intel)
-        pacman -S --noconfirm vulkan-intel lib32-vulkan-intel intel-media-driver
+        pacman -S --noconfirm vulkan-intel intel-media-driver lib32-vulkan-intel
         ;;
     NVIDIA)
-        pacman -S --noconfirm nvidia nvidia-utils lib32-nvidia-utils nvidia-settings
+        pacman -S --noconfirm nvidia nvidia-utils nvidia-settings lib32-nvidia-utils
         ;;
     *)
         echo "❌ Omitiendo instalación de drivers GPU específicos"
