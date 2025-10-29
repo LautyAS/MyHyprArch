@@ -18,9 +18,6 @@ pacstrap /mnt base linux linux-firmware sof-firmware neovim sudo git networkmana
 echo "Generando fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# bootloader
-echo "BOOTLOADER=grub" > /mnt/tmp_boot_choice.sh
-
 echo ""
 echo "Instalación base completada."
 echo "Ahora podés ejecutar el script 04-config_system.sh desde chroot."
