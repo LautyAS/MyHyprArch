@@ -10,11 +10,12 @@ if [[ ! -d /mnt ]]; then
     exit 1
 fi
 
+cp -r configs/ /mnt/home/configs
+cp -r rice/ /mnt/home/rice
+
 # --- Entrar al chroot ---
 arch-chroot /mnt /bin/bash <<'EOF'
 set -e
-
-cp -r configs/* /mnt/home/configs
 
 # --- Cargar variables ---
 if [[ -f /tmp_install_vars.sh ]]; then
