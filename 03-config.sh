@@ -61,6 +61,8 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 echo "🔌 Habilitando NetworkManager..."
 systemctl enable NetworkManager
 
+pacman -Sy
+
 echo "🎮 Instalando paquetes específicos para GPU..."
 case "$GPU" in
     AMD)
