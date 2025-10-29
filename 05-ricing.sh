@@ -14,6 +14,8 @@ fi
 arch-chroot /mnt /bin/bash <<'EOF'
 set -e
 
+cp -r configs/* /mnt/home/configs
+
 # --- Cargar variables ---
 if [[ -f /tmp_install_vars.sh ]]; then
     source /tmp_install_vars.sh
@@ -28,19 +30,19 @@ echo "📂 Asegurando directorios del usuario..."
 mkdir -p "$USER_HOME/.config" "$USER_HOME/Pictures/wallpapers"
 
 # --- Copiar configs ---
-if [[ -d /root/configs/.config ]]; then
+if [[ -d /home/configs/.config ]]; then
     echo "📁 Copiando configuraciones de usuario..."
-    cp -r /root/configs/.config/* "$USER_HOME/.config/"
+    cp -r /home/configs/.config/* "$USER_HOME/.config/"
 fi
 
-if [[ -d /root/configs/etc/xdg ]]; then
+if [[ -d /home/configs/etc/xdg ]]; then
     echo "📁 Copiando configs de XDG..."
-    cp -r /root/configs/etc/xdg/* /etc/xdg/
+    cp -r /home/configs/etc/xdg/* /etc/xdg/
 fi
 
 # --- Copiar wallpapers ---
-if [[ -d /root/rice/wallpapers ]]; then
-    cp -r /root/rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
+if [[ -d /home/rice/wallpapers ]]; then
+    cp -r /home/rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
     echo "✅ Wallpapers copiados."
 fi
 
