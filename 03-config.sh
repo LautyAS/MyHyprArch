@@ -10,6 +10,13 @@ if [[ ! -d /mnt ]]; then
     exit 1
 fi
 
+echo "Configurando pacman..."
+grep -q "^ILoveCandy" "$CONFPM" || sed -i '/#Color/i ILoveCandy' "$CONFPM"
+sed -i 's/^#Color/Color/' "$CONFPM"
+sed -i 's/^#\?\s*ParallelDownloads *= *.*/ParallelDownloads = 10/' "$CONFPM"
+sed -i '/^\s*#\[multilib\]/s/^#//' "$CONFPM"
+sed -i '/^\[multilib\]/,/^$/s/^\(\s*\)#\s*\(Include = \/etc\/pacman.d\/mirrorlist\)/\1\2/' "$CONFPM"
+
 # --- Entrar al chroot ---
 arch-chroot /mnt /bin/bash <<'EOF'
 set -e
@@ -53,13 +60,6 @@ systemctl enable NetworkManager
 echo "Haciendo backup de la configuración de pacman..."
 CONFPM="/mnt/etc/pacman.conf"
 cp "$CONFPM" "${CONFPM}.bak"
-
-echo "Configurando pacman..."
-grep -q "^ILoveCandy" "$CONFPM" || sed -i '/#Color/i ILoveCandy' "$CONFPM"
-sed -i 's/^#Color/Color/' "$CONFPM"
-sed -i 's/^#\?\s*ParallelDownloads *= *.*/ParallelDownloads = 10/' "$CONFPM"
-sed -i '/^\s*#\[multilib\]/s/^#//' "$CONFPM"
-sed -i '/^\[multilib\]/,/^$/s/^\(\s*\)#\s*\(Include = \/etc\/pacman.d\/mirrorlist\)/\1\2/' "$CONFPM"
 
 echo "🎮 Instalando paquetes específicos para GPU..."
 case "$GPU" in
