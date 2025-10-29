@@ -12,14 +12,6 @@ else
     exit 1
 fi
 
-# Cargar elección de bootloader
-if [[ -f /mnt/tmp_boot_choice.sh ]]; then
-    source /mnt/tmp_boot_choice.sh
-else
-    echo "No se encontró la elección de bootloader. Usaremos systemd-boot por defecto."
-    BOOTLOADER=systemd-boot
-fi
-
 # ---- Solicitar usuario y contraseñas fuera del chroot ----
 read -rp "Ingrese el hostname del sistema: " HOSTNAME
 read -rp "Ingrese nombre de usuario: " USERNAME
@@ -96,24 +88,7 @@ systemctl enable NetworkManager
 echo "/swapfile none swap sw 0 0" >> /etc/fstab
 
 # Instalar bootloader
-echo "Instalando bootloader $BOOTLOADER..."
-if [[ "$BOOTLOADER" == "systemd-boot" ]]; then
-    bootctl --path=/boot/efi install
-    chmod 700 /boot/efi
-    cat <<EOL > /boot/efi/loader/loader.conf
-default arch
-timeout 3
-editor 0
-EOL
-
-    ROOT_UUID=\$(blkid -s UUID -o value /dev/disk/by-partuuid/\$(lsblk -no PARTUUID \$(findmnt / -n -o SOURCE)))
-    cat <<EOL > /boot/efi/loader/entries/arch.conf
-title   Arch Linux
-linux   /vmlinuz-linux
-initrd  /initramfs-linux.img
-options root=UUID=\$ROOT_UUID rw
-EOL
-else
+echo "Instalando bootloader GRUB..."
     pacman -S --noconfirm grub
     if [[ -d /sys/firmware/efi ]]; then
         echo "UEFI detectado → instalando GRUB en EFI..."
