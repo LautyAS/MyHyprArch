@@ -25,16 +25,16 @@ fi
 echo "📦 Actualizando sistema..."
 pacman -Syu --noconfirm git base-devel
 
-echo "💻 Instalando paru (AUR helper)..."
-cd /tmp
-git clone https://aur.archlinux.org/paru-bin.git
-cd paru-bin
-makepkg -si --noconfirm
-cd ..
-rm -rf paru-bin
+#echo "💻 Instalando paru (AUR helper)..."
+#cd /tmp
+#git clone https://aur.archlinux.org/paru-bin.git
+#cd paru-bin
+#makepkg -si --noconfirm
+#cd ..
+#rm -rf paru-bin
 
 echo "🎨 Instalando Hyprland, utilidades y floorp..."
-paru -S --noconfirm \
+pacman -S --noconfirm \
     hyprland hyprpaper kitty waybar wofi ly \
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools \
@@ -45,7 +45,7 @@ paru -S --noconfirm \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
     spotify-launcher steam \
-    floorp-bin \
+    firefox \
     noto-fonts noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto
 
 echo "🔌 Habilitando servicios necesarios..."
