@@ -25,13 +25,10 @@ echo "Seleccione el locale principal:"
 LOCALE=$(grep -v '^#' /etc/locale.gen | awk '{$1=$1};1' | fzf --height 15 --prompt="Locale: ")
 echo "Locale seleccionado: $LOCALE"
 
-# --- Selección de zona horaria ---
 echo "Seleccione la zona horaria:"
 TIMEZONE=$(find /usr/share/zoneinfo -type f \
-    ! -path "*/posix*" \
-    ! -path "*/right*" \
-    ! -path "*/Etc/*" | \
-    sed 's|/usr/share/zoneinfo/||' | fzf --height 20 --prompt="Zona horaria: ")
+    | sed 's|/usr/share/zoneinfo/||' \
+    | fzf --prompt="Seleccione su zona horaria: " --height=40% --border --ansi)
 echo "Zona horaria seleccionada: $TIMEZONE"
 
 # --- Selección de GPU ---
