@@ -30,6 +30,10 @@ if [[ -d /sys/firmware/efi ]]; then
             1)
                 echo "systemd-boot seleccionado"
                 echo "BOOTLOADER=systemd-boot" > /mnt/tmp_boot_choice.sh
+                mount --bind /sys /mnt/sys
+                mount --bind /proc /mnt/proc
+                mount --bind /dev /mnt/dev
+                mount --bind /run /mnt/run
                 break
                 ;;
             2)
