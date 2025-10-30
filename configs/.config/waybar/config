@@ -14,17 +14,19 @@
    
     
     "custom/keyboard": {
-   	"exec": "~/.config/waybar/scripts/keyboard_layout.sh",
+    	"exec": "~/.config/waybar/scripts/keyboard_layout_fcitx.sh",
     	"interval": 1,
-    	"on-click": "~/.config/waybar/scripts/keyboard_layout.sh click",
-    	"format": "{text}"
+    	"on-click": "~/.config/waybar/scripts/keyboard_layout_fcitx.sh click",
+    	"format": "{text}",
+    	"tooltip": true
     },
 
     "custom/jp_mode": {
-    	"exec": "~/.config/waybar/scripts/jp_mode_toggle.sh",
+	"exec": "~/.config/waybar/scripts/jp_mode_fcitx.sh",
     	"interval": 1,
-    	"on-click": "~/.config/waybar/scripts/jp_mode_toggle.sh click",
-    	"format": "{text}"
+    	"on-click": "~/.config/waybar/scripts/jp_mode_fcitx.sh click",
+    	"format": "{text}",
+    	"tooltip": true	
     },
 
 	
