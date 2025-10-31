@@ -1,0 +1,68 @@
+/* === Ajuste general de todos los módulos === */
+#waybar > * {
+    padding: 0 6px;           /* espacio horizontal */
+    margin: 2px 4px;          /* margen vertical + horizontal */
+    border-radius: 5px;       /* esquinas suaves */
+    font-size: 12px;          /* tamaño de texto uniforme */
+    min-height: 18px;         /* alto mínimo coherente */
+}
+
+
+window#waybar {
+    background: rgba(20, 20, 20, 0.8);  /* fondo oscuro semitransparente */
+    color: #ffffff;
+    font-family: "Fira Code", "Noto Color Emoji", monospace;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: none;
+}
+
+#battery, #network, #pulseaudio, #clock, #cpu, #memory, #backlight {
+    color: #ffffff;
+    font-family: "Fira Code", monospace;
+    font-weight: bold;
+    font-size: 11px;
+    margin: 2px 2px;
+}
+
+#workspaces button {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 0 3px;
+    margin: 2px 2px;
+    font-size: 12px;
+    min-width: 10px;
+    min-height: 16px;
+    transition: background 0.2s ease;
+}
+
+#workspaces button.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#workspaces button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#custom-keyboard {
+    padding: 0 4px;
+    margin: 2px 2px;
+    border-radius: 6px;
+    background: rgba(192, 192, 192, 0.1); /* fondo semitransparente del módulo */
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 24px;
+    min-height: 20px;
+    }
+
+#custom-jp_mode {
+    padding: 0 4px;
+    margin: 2px 2px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.1); /* semitransparente */
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 24px;
+    }
+

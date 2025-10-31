@@ -40,13 +40,14 @@ pacman -S --noconfirm \
     lib32-mesa mesa-utils vulkan-tools \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
     polkit polkit-gnome \
-    nm-connection-editor \
+    nmcli nm-applet\
     htop fastfetch \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
     spotify-launcher steam \
     firefox \
-    noto-fonts noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto
+    noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto
+    
 
 echo "🔌 Habilitando servicios necesarios..."
 systemctl enable NetworkManager

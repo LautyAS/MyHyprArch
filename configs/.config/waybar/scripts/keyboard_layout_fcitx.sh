@@ -1,45 +1,40 @@
 #!/bin/bash
-# Módulo Waybar limpio: rota EN / ESP / JP solo vía fcitx5
+# Módulo Waybar: rota EN / ESP / JP usando fcitx5
 
-# Lista de métodos de entrada
 inputs=("keyboard-us-intl" "keyboard-latam" "mozc")
 state_file="/tmp/waybar_fcitx_state"
 
-# Inicializar si no existe
-if [ ! -f "$state_file" ]; then
-    echo 0 > "$state_file"
-fi
-
+# Inicializar índice
+[ ! -f "$state_file" ] && echo 0 > "$state_file"
 index=$(cat "$state_file")
 
+# Rotar al hacer click
 if [ "$1" = "click" ]; then
-    # Rotar al siguiente método
     index=$(( (index + 1) % ${#inputs[@]} ))
     echo $index > "$state_file"
-
-    # Cambiar método activo en fcitx5
     fcitx5-remote -s "${inputs[$index]}"
 fi
 
-# Mostrar estado en Waybar
 layout=${inputs[$index]}
 case $layout in
-    "keyboard_us_intl)")
-        text="🇺🇸 EN"
-        color="#10b981"
-        tooltip="US Intl"
+    "keyboard-us-intl")
+        text="🇬🇧"
+        class_name="us"
     ;;
-    "keyboard_latam)")
-        text="🇲🇽 ESP"
-        color="#3b82f6"
-        tooltip="Esp Latam"
+    "keyboard-latam")
+        text="🇪🇸"
+        class_name="es"
     ;;
     "mozc")
-        text="🇯🇵 JP"
-        color="#ef4444"
-        tooltip="Jp"
+        text="🇯🇵"
+        class_name="jp"
+    ;;
+    *)
+        text="❓"
+        class_name="unknown"
     ;;
 esac
 
-echo "{\"text\": \"$text\", \"class\": \"$layout\", \"color\": \"$color\", \"tooltip\": \"$tooltip\"}"
+# Devolver JSON limpio para Waybar
+echo "{\"text\": \"$text\", \"class\": \"$class_name\"}"
 
