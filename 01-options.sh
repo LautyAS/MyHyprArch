@@ -10,6 +10,10 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+echo "Instalando fzf para seleccionar configs"
+
+pacman -S --noconfirm --needed fzf
+
 # --- Detección de fzf ---
 USE_FZF=false
 if command -v fzf >/dev/null 2>&1; then
@@ -21,26 +25,26 @@ select_option() {
     local prompt="$1"; shift
     local options=("$@")
 
-    if $USE_FZF; then
+    #if $USE_FZF; then
         echo "${options[@]}" | tr ' ' '\n' | fzf --prompt "$prompt → "
-    else
-        echo "$prompt"
-        local i=1
-        for opt in "${options[@]}"; do
-            echo "  $i) $opt"
-            ((i++))
-        done
-        local choice
-        while true; do
-            read -rp "Selecciona una opción [1-${#options[@]}]: " choice
-            if [[ "$choice" =~ ^[0-9]+$ ]] && ((choice >= 1 && choice <= ${#options[@]})); then
-                echo "${options[$((choice - 1))]}"
-                return
-            else
-                echo "❌ Opción inválida. Intenta de nuevo."
-            fi
-        done
-    fi
+    #else
+    #    echo "$prompt"
+    #    local i=1
+    #    for opt in "${options[@]}"; do
+    #        echo "  $i) $opt"
+    #        ((i++))
+    #    done
+    #    local choice
+    #    while true; do
+    #        read -rp "Selecciona una opción [1-${#options[@]}]: " choice
+    #        if [[ "$choice" =~ ^[0-9]+$ ]] && ((choice >= 1 && choice <= ${#options[@]})); then
+    #            echo "${options[$((choice - 1))]}"
+    #            return
+    #        else
+    #            echo "❌ Opción inválida. Intenta de nuevo."
+    #        fi
+    #    done
+    #fi
 }
 
 # --- Selección de disco ---
