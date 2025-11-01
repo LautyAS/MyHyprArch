@@ -58,13 +58,25 @@ packages="hyprland hyprpaper kitty waybar wofi ly \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
     spotify-launcher steam \
-    floorp-bin \
     noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto"
 
-su - "$USERNAME" -c '
-export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-paru -S --noconfirm '"$packages"'
-'
+packages_aur="floorp-bin noto"
+
+pacman -S --noconfirm '"$packages"'
+su - "$USERNAME" -c "
+cd /home/$USERNAME && \
+git clone https://aur.archlinux.org/floorp-bin.git && \
+cd floorp-bin && \
+makepkg -f --noconfirm 
+"
+
+cd /home/$USERNAME/floorp-bin
+for pkgfile in floorp-bin*.pkg.tar.zst; do
+    pacman -U --noconfirm "$pkgfile"
+done
+cd /home/$USERHOME
+rm -rf floorp-bin
+
 
 echo "🔌 Habilitando servicios necesarios..."
 systemctl enable NetworkManager
