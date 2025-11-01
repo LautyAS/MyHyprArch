@@ -40,15 +40,9 @@ done
 cd /home/$USERHOME
 rm -rf paru-bin
 
-
-echo "Dando permisos de ejecución de paru sin contraseña..."
-
-echo "$USERNAME ALL=(ALL) NOPASSWD: /usr/bin/paru, /usr/bin/pacman" | sudo tee /etc/sudoers.d/paru > /dev/null
-sudo chmod 440 /etc/sudoers.d/paru
-
 echo "🎨 Instalando Hyprland, utilidades y floorp..."
 
-packages="hyprland hyprpaper kitty waybar wofi ly \
+packages=(hyprland hyprpaper kitty waybar wofi ly \
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
@@ -58,11 +52,10 @@ packages="hyprland hyprpaper kitty waybar wofi ly \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
     spotify-launcher steam \
-    noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto"
+    noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto)
 
-packages_aur="floorp-bin noto"
+pacman -Syyu --noconfirm --needed "$packages"
 
-pacman -S --noconfirm '"$packages"'
 su - "$USERNAME" -c "
 cd /home/$USERNAME && \
 git clone https://aur.archlinux.org/floorp-bin.git && \
