@@ -60,8 +60,6 @@ chown -R "$USERNAME:$USERNAME" "$USER_HOME/.config" "$USER_HOME/Pictures"
 
 echo "✨ Ricing aplicado correctamente dentro del chroot."
 
-read -p "¿Do you want to disable (at-spi-dbus-bus) to save some resources? (It is an accesibility service, most people don't need it) (y/N): " a11y
-
 if [[ "$a11y" == "y" || "$a11y" == "Y" ]]; then
     systemctl --user mask at-spi-dbus-bus.service
 fi
