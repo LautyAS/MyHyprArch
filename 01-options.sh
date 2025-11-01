@@ -88,6 +88,12 @@ case "$SAMEPASS" in
         ;;
 esac
 
+# --- Servicio de accesibilidad ---
+read -p "¿Querés desactivar (at-spi-dbus-bus) para ahorrar algunos recursos? (Es un servicio de accesibilidad, la mayoría de la gente no lo necesita) (y/N): " a11y
+
+# --- Impresoras ---
+read -p "¿Querés instalar servicios de impresoras? (y/N): " PRINTSRV
+
 echo "Seleccione la zona horaria:"
 TIMEZONE=$(find /usr/share/zoneinfo -type f \
     | sed 's|/usr/share/zoneinfo/||' \
@@ -97,9 +103,6 @@ echo "Zona horaria seleccionada: $TIMEZONE"
 # --- Idioma del sistema ---
 LOCALE_OPTIONS=("es_AR.UTF-8" "es_ES.UTF-8" "en_US.UTF-8")
 LOCALE=$(select_option "🗣️  Selecciona el idioma del sistema" "${LOCALE_OPTIONS[@]}")
-
-# --- Servicio de accesibilidad ---
-read -p "¿Querés desactivar (at-spi-dbus-bus) para ahorrar algunos recursos? (Es un servicio de accesibilidad, la mayoría de la gente no lo necesita) (y/N): " a11y
 
 # --- GPU ---
 GPU=$(printf "AMD\nIntel\nNvidia\nOmitir\n" | fzf --height=10 --border --prompt="GPU: ")
@@ -131,6 +134,7 @@ PASSWORD="$PASSWORD"
 ROOTPASS="$ROOTPASS"
 TIMEZONE="$TIMEZONE"
 LOCALE="$LOCALE"
+PRINTSRV="$PRINTSRV"
 a11y="$a11y"
 GPU="$GPU"
 EOF
