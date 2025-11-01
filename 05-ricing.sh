@@ -28,8 +28,10 @@ fi
 USER_HOME="/home/$USERNAME"
 
 echo "📂 Asegurando directorios del usuario..."
-mkdir -p "$USER_HOME/.config" "$USER_HOME/Pictures/wallpapers"
-mkdir -p "$USER_HOME/.config" "$USER_HOME/Pictures/Screenshots"
+mkdir -p "$USER_HOME/.config"
+mkdir -p "$USER_HOME/Pictures/wallpapers"
+mkdir -p "$USER_HOME/Pictures/Screenshots"
+mkdir -p "$USER_HOME/.config/dunst"
 
 # --- Copiar configs ---
 if [[ -d /home/configs/.config ]]; then
