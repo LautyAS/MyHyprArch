@@ -51,6 +51,7 @@ packages=(hyprland hyprpaper kitty waybar wofi ly \
     file-roller thunar-archive-plugin unzip p7zip unrar-free \
     polkit polkit-gnome \
     network-manager-applet \
+    bluez bluez-utils blueman \
     htop fastfetch \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
@@ -76,6 +77,7 @@ rm -rf floorp-bin
 
 
 echo "🔌 Habilitando servicios necesarios..."
+systemctl enable bluetooth
 systemctl enable NetworkManager
 systemctl enable ly
 
