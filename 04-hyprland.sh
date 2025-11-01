@@ -37,7 +37,7 @@ cd /home/$USERNAME/paru-bin
 for pkgfile in paru-bin*.pkg.tar.zst; do
     pacman -U --noconfirm "$pkgfile"
 done
-cd /home/$USERHOME
+cd /home/$USERNAME
 rm -rf paru-bin
 
 echo "🎨 Instalando Hyprland, utilidades y floorp..."
@@ -48,14 +48,15 @@ packages=(hyprland hyprpaper kitty waybar wofi ly \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
     grim slurp swappy wl-clipboard \
     polkit polkit-gnome \
-    nmcli nm-applet \
+    network-manager-applet \
     htop fastfetch \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
     spotify-launcher steam \
+    imagemagick \
     noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto)
 
-pacman -Syyu --noconfirm --needed "$packages"
+pacman -Syyu --noconfirm --needed "${packages[@]}"
 
 su - "$USERNAME" -c "
 cd /home/$USERNAME && \
@@ -68,7 +69,7 @@ cd /home/$USERNAME/floorp-bin
 for pkgfile in floorp-bin*.pkg.tar.zst; do
     pacman -U --noconfirm "$pkgfile"
 done
-cd /home/$USERHOME
+cd /home/$USERNAME
 rm -rf floorp-bin
 
 
