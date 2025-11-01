@@ -98,6 +98,9 @@ echo "Zona horaria seleccionada: $TIMEZONE"
 LOCALE_OPTIONS=("es_AR.UTF-8" "es_ES.UTF-8" "en_US.UTF-8")
 LOCALE=$(select_option "🗣️  Selecciona el idioma del sistema" "${LOCALE_OPTIONS[@]}")
 
+# --- Servicio de accesibilidad ---
+read -p "¿Querés desactivar (at-spi-dbus-bus) para ahorrar algunos recursos? (Es un servicio de accesibilidad, la mayoría de la gente no lo necesita) (y/N): " a11y
+
 # --- GPU ---
 GPU=$(printf "AMD\nIntel\nNvidia\nOmitir\n" | fzf --height=10 --border --prompt="GPU: ")
 echo "GPU seleccionado: $GPU"
@@ -111,6 +114,7 @@ echo "  Hostname:       $HOSTNAME"
 echo "  Zona horaria:   $TIMEZONE"
 echo "  Locale:         $LOCALE"
 echo "  GPU:            $GPU"
+
 echo ""
 read -rp "¿Confirmar y guardar configuración? (y/N): " CONFIRM
 if [[ "$CONFIRM" != "y" || "$CONFIRM" == "Y" ]]; then
@@ -127,6 +131,7 @@ PASSWORD="$PASSWORD"
 ROOTPASS="$ROOTPASS"
 TIMEZONE="$TIMEZONE"
 LOCALE="$LOCALE"
+a11y="$a11y"
 GPU="$GPU"
 EOF
 
