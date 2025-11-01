@@ -81,5 +81,10 @@ systemctl enable bluetooth
 systemctl enable NetworkManager
 systemctl enable ly
 
+if [[ "$PRINTSRV" == "y" || "$PRINTSRV" == "Y" ]]; then
+pacman -S cups system-config-printer simple-scan gutenprint hplip
+sudo systemctl enable cups.service
+fi
+
 echo "✅ Instalación de Hyprland y utilidades completada."
 EOF
