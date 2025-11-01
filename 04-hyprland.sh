@@ -42,7 +42,7 @@ rm -rf paru-bin
 
 echo "🎨 Instalando Hyprland, utilidades y floorp..."
 
-packages=(hyprland hyprpaper kitty waybar wofi ly dunst \
+packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl \
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
