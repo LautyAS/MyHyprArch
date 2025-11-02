@@ -47,7 +47,7 @@ packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl \
     lib32-mesa mesa-utils vulkan-tools \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
     grim slurp swappy wl-clipboard \
-    gvfs gvfs-mtp gvfs-afc gvfs-smb udiskie polkit thunar-volman mpv imv \
+    gvfs gvfs-mtp gvfs-afc gvfs-smb gvfs-nfs udiskie polkit thunar-volman mpv imv sshfs \
     file-roller thunar-archive-plugin unzip p7zip unrar-free \
     polkit polkit-gnome \
     network-manager-applet \
@@ -77,13 +77,18 @@ rm -rf floorp-bin
 
 
 echo "🔌 Habilitando servicios necesarios..."
-systemctl enable bluetooth
-systemctl enable NetworkManager
-systemctl enable ly
+systemctl enable bluetooth       # Bluetooth 
+systemctl enable NetworkManager  # Internet
+systemctl enable ly              # Gestor de sesiones
+
+if [[ "$NETDSKSRV" == "y" || "$NETDSKSRV" == "Y" ]]; then
+systemctl enable avahi-daemon
+fi
+
 
 if [[ "$PRINTSRV" == "y" || "$PRINTSRV" == "Y" ]]; then
 pacman -S cups system-config-printer simple-scan gutenprint hplip
-sudo systemctl enable cups.service
+systemctl enable cups
 fi
 
 echo "✅ Instalación de Hyprland y utilidades completada."
