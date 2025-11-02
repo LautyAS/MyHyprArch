@@ -94,6 +94,9 @@ read -p "¿Querés desactivar (at-spi-dbus-bus) para ahorrar algunos recursos? (
 # --- Impresoras ---
 read -p "¿Querés instalar servicios de impresoras? (y/N): " PRINTSRV
 
+# --- Discos en red ---
+read -p "¿Querés activar servicios de busqueda de unidades en red? (y/N): " NETDSKSRV
+
 echo "Seleccione la zona horaria:"
 TIMEZONE=$(find /usr/share/zoneinfo -type f \
     | sed 's|/usr/share/zoneinfo/||' \
@@ -137,6 +140,7 @@ LOCALE="$LOCALE"
 PRINTSRV="$PRINTSRV"
 a11y="$a11y"
 GPU="$GPU"
+NETDSKSRV="$NETDSKSRV"
 EOF
 
 # --- Si ya existe /mnt (para cuando se corre desde el live antes del chroot) ---
