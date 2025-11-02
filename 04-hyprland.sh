@@ -47,7 +47,7 @@ packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl \
     lib32-mesa mesa-utils vulkan-tools \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
     grim slurp swappy wl-clipboard \
-    gvfs gvfs-mtp gvfs-afc gvfs-smb udiskie polkit thunar-volman \
+    gvfs gvfs-mtp gvfs-afc gvfs-smb udiskie polkit thunar-volman mpv imv \
     file-roller thunar-archive-plugin unzip p7zip unrar-free \
     polkit polkit-gnome \
     network-manager-applet \
