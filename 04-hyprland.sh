@@ -64,13 +64,10 @@ pacman -Syyu --noconfirm --needed "${packages[@]}"
 su - "$USERNAME" -c "
 cd /home/$USERNAME && \
 git clone https://aur.archlinux.org/floorp-bin.git && \
-git clone https://aur.archlinux.org/vimix-icon-theme.git\
-git clone https://aur.archlinux.org/kimi-dark-gtk-theme-git.git\
+git clone https://aur.archlinux.org/maplemono.git && \
 cd floorp-bin && \
-makepkg -f --noconfirm \
-cd ../vimix-icon-theme \
-makepkg -f --noconfirm \
-cd ../kimi-dark-gtk-theme-git \
+makepkg -f --noconfirm && \
+cd ../maplemono && \
 makepkg -f --noconfirm
 "
 
