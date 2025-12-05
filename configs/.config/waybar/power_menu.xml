@@ -6,23 +6,20 @@
 			<property name="label">Suspend</property>
         </object>
 	</child>
-	<child>
-        <object class="GtkMenuItem" id="hibernate">
-			<property name="label">Hibernate</property>
+    <child>
+        <object class="GtkMenuItem" id="close session">
+			<property name="label">Close session</property>
         </object>
 	</child>
     <child>
         <object class="GtkMenuItem" id="shutdown">
 			<property name="label">Shutdown</property>
         </object>
-    </child>
+    	</child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="delimiter1"/>
-    </child>
-    <child>
-		<object class="GtkMenuItem" id="reboot">
+	<object class="GtkMenuItem" id="reboot">
 			<property name="label">Reboot</property>
-		</object>
+	</object>
     </child>
   </object>
 </interface>

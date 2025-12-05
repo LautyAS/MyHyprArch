@@ -1,68 +1,66 @@
 /* === Ajuste general de todos los módulos === */
+
+
 #waybar > * {
-    padding: 0 6px;           /* espacio horizontal */
-    margin: 2px 4px;          /* margen vertical + horizontal */
-    border-radius: 5px;       /* esquinas suaves */
-    font-size: 12px;          /* tamaño de texto uniforme */
-    min-height: 18px;         /* alto mínimo coherente */
+    font-family: "Maple Mono NF";
+    font-weight: bold;
+    padding: 0px;
+    margin: 2px 4px;
+    border-radius: 8px;
+    font-size: 13px;
+    background: transparent;
 }
 
 
 window#waybar {
-    background: rgba(20, 20, 20, 0.8);  /* fondo oscuro semitransparente */
+    background: rgba(20, 20, 20, 0.8);
     color: #ffffff;
-    font-family: "Fira Code", "Noto Color Emoji", monospace;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
     border: none;
 }
 
-#battery, #network, #pulseaudio, #clock, #cpu, #memory, #backlight {
+#custom-updates, #custom-keyboard, #custom-power #custom-jp_mode, #tray, #battery, #pulseaudio, #network, #clock, #cpu, #memory, #backlight {
+    font-family: "Maple Mono NF";
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0px 6px;
+    border-radius: 5px;
     color: #ffffff;
-    font-family: "Fira Code", monospace;
-    font-weight: bold;
     font-size: 11px;
     margin: 2px 2px;
+    margin-right: 0px;
+    min-height: 18px;
+}
+
+#custom-power{
+    padding: 6px;
+}
+
+#custom-updates {
+    background: transparent;
 }
 
 #workspaces button {
+    font-family: "Maple Mono NF";
+    font-weight: bold;
     background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
-    border-radius: 5px;
-    padding: 0 3px;
+    font-size: 11px;
+    padding: 0 2px;
     margin: 2px 2px;
-    font-size: 12px;
-    min-width: 10px;
-    min-height: 16px;
+    min-width: 8px;
+    min-height: 14px;
     transition: background 0.2s ease;
 }
-
 #workspaces button.active {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
 }
-
 #workspaces button:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-#custom-keyboard {
-    padding: 0 4px;
-    margin: 2px 2px;
-    border-radius: 6px;
-    background: rgba(192, 192, 192, 0.1); /* fondo semitransparente del módulo */
-    font-weight: bold;
+#custom-keyboard, #custom-jp_mode
+{
+    padding-top: 2px;
     font-size: 14px;
-    min-width: 24px;
-    min-height: 20px;
+    min-width: 18px;
     }
-
-#custom-jp_mode {
-    padding: 0 4px;
-    margin: 2px 2px;
-    border-radius: 6px;
-    background: rgba(255,255,255,0.1); /* semitransparente */
-    font-weight: bold;
-    font-size: 12px;
-    min-width: 24px;
-    }
-

@@ -6,20 +6,16 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-
+    
     "modules-left": [
         "hyprland/workspaces",
 	"custom/keyboard",
 	"custom/jp_mode"
     ],
 
-    "modules-center": [
-    "clock",
-    "idle-inhibitor"
-    ],
+    "modules-center": ["clock"],
 
     "modules-right": [
-        "mpd",
 	"custom/updates",
 	"pulseaudio",
 	"cpu",
@@ -27,11 +23,8 @@
 	"backlight",
 	"battery",
 	"tray",
-	"custom/power"
     ],
 
-    
-    //Modules configuration
 
 
     "custom/updates": {
@@ -46,6 +39,7 @@
     "exec": "waybar-module-pacman-updates --no-zero-output",
     "on-click": "kitty -e paru -Syu --noconfirm && flatpak update --assumeyes"
 },
+	
 
     "custom/keyboard": {
     	"exec": "~/.config/waybar/scripts/keyboard_layout_fcitx.sh",
@@ -61,53 +55,24 @@
     	"return-type": "json"
     },
 
-    
+
+    // Modules configuration
+
+
+
      "hyprland/workspaces": {
          "disable-scroll": true,
+	 "hover": false,
          "all-outputs": true,
     	 "warp-on-scroll": false,
          "format": "{name}",
-         "cursor": true,
+	 "cursor": true,
+         }
      },
      
-
-    "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-        "unknown-tag": "N/A",
-        "interval": 5,
-        "consume-icons": {
-            "on": " "
-        },
-        "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
-        },
-        "repeat-icons": {
-            "on": " "
-        },
-        "single-icons": {
-            "on": "1 "
-        },
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
-    
     "tray": {
         // "icon-size": 21,
-        "spacing": 10
+        "spacing": 16
     },
     "clock": {
         "timezone": "America/Argentina/Buenos_Aires",
@@ -116,7 +81,8 @@
     },
     "cpu": {
         "format": "{usage}% ",
-        "tooltip": false
+	"tooltip-format": "CPU: {usage}%"
+        // "tooltip": false
     },
     "memory": {
         "format": "{}% "
@@ -125,7 +91,7 @@
     "backlight": {
         // "device": "acpi_video1",
         "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"]
     },
     "battery": {
         "states": {
@@ -141,16 +107,6 @@
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
-    },
-    
-    "network": {
-       // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}",
     },
 
     "pulseaudio": {
@@ -171,17 +127,6 @@
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
-    },
-    "custom/power": {
-        "format" : "⏻",
-		"tooltip": false,
-		"menu": "on-click",
-		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
-		"menu-actions": {
-			"shutdown": "poweroff",
-			"reboot": "reboot",
-			"suspend": "systemctl suspend",
-			"close session": "systemctl soft-reboot"
-		}
     }
-}
+
+
