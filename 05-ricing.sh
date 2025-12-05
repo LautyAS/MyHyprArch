@@ -29,19 +29,16 @@ USER_HOME="/home/$USERNAME"
 
 echo "📂 Asegurando directorios del usuario..."
 mkdir -p "$USER_HOME/.config"
+mkdir -p "$USER_HOME/.themes"
+mkdir -p "$USER_HOME/.icons"
 mkdir -p "$USER_HOME/Pictures/wallpapers"
 mkdir -p "$USER_HOME/Pictures/Screenshots"
 mkdir -p "$USER_HOME/.config/dunst"
 
 # --- Copiar configs ---
-if [[ -d /home/configs/.config ]]; then
+if [[ -d /home/configs/ ]]; then
     echo "📁 Copiando configuraciones de usuario..."
-    cp -r /home/configs/.config/* "$USER_HOME/.config/"
-fi
-
-if [[ -d /home/configs/etc/xdg ]]; then
-    echo "📁 Copiando configs de XDG..."
-    cp -r /home/configs/etc/xdg/* /etc/xdg/
+    cp -r /home/configs/* "$USER_HOME/"
 fi
 
 # --- Copiar wallpapers ---

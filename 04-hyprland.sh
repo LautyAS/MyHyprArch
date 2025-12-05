@@ -42,7 +42,7 @@ rm -rf paru-bin
 
 echo "🎨 Instalando Hyprland, utilidades y floorp..."
 
-packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl \
+packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl nwg-look\
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
@@ -57,24 +57,35 @@ packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl \
     xdg-desktop-portal xdg-desktop-portal-wlr \
     spotify-launcher steam \
     imagemagick \
-    noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-nerd-fonts-symbols ttf-noto-nerd ttf-firacode-nerd ttf-sourcecodepro-nerd ttf-jetbrains-mono ttf-roboto)
+    noto-fonts unicode-emoji noto-fonts-emoji noto-fonts-cjk)
 
 pacman -Syyu --noconfirm --needed "${packages[@]}"
 
 su - "$USERNAME" -c "
 cd /home/$USERNAME && \
 git clone https://aur.archlinux.org/floorp-bin.git && \
+git clone https://aur.archlinux.org/vimix-icon-theme.git\
+git clone https://aur.archlinux.org/kimi-dark-gtk-theme-git.git\
 cd floorp-bin && \
-makepkg -f --noconfirm 
+makepkg -f --noconfirm \
+cd ../vimix-icon-theme \
+makepkg -f --noconfirm \
+cd ../kimi-dark-gtk-theme-git \
+makepkg -f --noconfirm
 "
 
 cd /home/$USERNAME/floorp-bin
 for pkgfile in floorp-bin*.pkg.tar.zst; do
     pacman -U --noconfirm "$pkgfile"
 done
-cd /home/$USERNAME
-rm -rf floorp-bin
 
+cd /home/$USERNAME/maplemono
+for pkgfile in maplemono-nf-unhinted*.pkg.tar.zst; do
+    pacman -U --noconfirm "$pkgfile"
+done
+
+cd /home/$USERNAME
+rm -rf floorp-bin maplemono
 
 echo "🔌 Habilitando servicios necesarios..."
 systemctl enable bluetooth       # Bluetooth 
