@@ -10,7 +10,7 @@ if [[ ! -d /mnt ]]; then
     exit 1
 fi
 
-cp -r configs/ /mnt/home/configs
+cp -r configs/ /mnt/home
 cp -r rice/ /mnt/home/rice
 
 # --- Entrar al chroot ---
