@@ -44,7 +44,7 @@ echo "🎨 Instalando Hyprland, utilidades y floorp..."
 
 packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl nwg-look\
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
-    lib32-mesa mesa-utils vulkan-tools \
+    lib32-mesa mesa-utils vulkan-tools ffmpeg4.4 \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
     grim slurp swappy wl-clipboard \
     gvfs gvfs-mtp gvfs-afc gvfs-smb gvfs-nfs udiskie polkit thunar-volman mpv imv sshfs \
