@@ -10,8 +10,8 @@ if [[ ! -d /mnt ]]; then
     exit 1
 fi
 
-cp -r configs/ /mnt/home
-cp -r rice/ /mnt/home/rice
+cp -r configs/ /mnt/home/$USERNAME
+cp -r rice/ /mnt/home/$USERNAME
 
 # --- Entrar al chroot ---
 arch-chroot /mnt /bin/bash <<'EOF'
@@ -27,25 +27,25 @@ fi
 
 USER_HOME="/home/$USERNAME"
 
-echo "📂 Asegurando directorios del usuario..."
-mkdir -p "$USER_HOME/.config"
-mkdir -p "$USER_HOME/.themes"
-mkdir -p "$USER_HOME/.icons"
-mkdir -p "$USER_HOME/Pictures/wallpapers"
-mkdir -p "$USER_HOME/Pictures/Screenshots"
-mkdir -p "$USER_HOME/.config/dunst"
+#echo "📂 Asegurando directorios del usuario..."
+#mkdir -p "$USER_HOME/.config"
+#mkdir -p "$USER_HOME/.themes"
+#mkdir -p "$USER_HOME/.icons"
+#mkdir -p "$USER_HOME/Pictures/wallpapers"
+#mkdir -p "$USER_HOME/Pictures/Screenshots"
+#mkdir -p "$USER_HOME/.config/dunst"
 
 # --- Copiar configs ---
-if [[ -d /home/configs/ ]]; then
-    echo "📁 Copiando configuraciones de usuario..."
-    cp -r /home/configs/* "$USER_HOME/"
-fi
+#if [[ -d /home/configs/ ]]; then
+#    echo "📁 Copiando configuraciones de usuario..."
+#    cp -r /home/configs/* "$USER_HOME/"
+#fi
 
 # --- Copiar wallpapers ---
-if [[ -d /home/rice/wallpapers ]]; then
-    cp -r /home/rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
-    echo "✅ Wallpapers copiados."
-fi
+#if [[ -d /home/rice/wallpapers ]]; then
+#    cp -r /home/rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
+#    echo "✅ Wallpapers copiados."
+#fi
 
 # --- Fcitx5 autostart ---
 AUTOSTART="$USER_HOME/.config/hypr/autostart.conf"
