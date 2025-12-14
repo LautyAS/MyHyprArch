@@ -42,7 +42,7 @@ rm -rf paru-bin
 
 echo "🎨 Instalando Hyprland, utilidades y floorp..."
 
-packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl nwg-look\
+packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl nwg-look jq \
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools ffmpeg4.4 \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
@@ -65,9 +65,12 @@ su - "$USERNAME" -c "
 cd /home/$USERNAME && \
 git clone https://aur.archlinux.org/floorp-bin.git && \
 git clone https://aur.archlinux.org/maplemono.git && \
+git clone https://aur.archlinux.org/waybar-updates.git && \
 cd floorp-bin && \
 makepkg -f --noconfirm && \
 cd ../maplemono && \
+makepkg -f --noconfirm && \
+cd ../waybar-updates && \
 makepkg -f --noconfirm
 "
 
@@ -81,8 +84,13 @@ for pkgfile in maplemono-nf-unhinted*.pkg.tar.zst; do
     pacman -U --noconfirm "$pkgfile"
 done
 
+cd /home/$USERNAME/waybar-updates
+for pkgfile in waybar-updates*.pkg.tar.zst; do
+    pacman -U --noconfirm "$pkgfile"
+done
+
 cd /home/$USERNAME
-rm -rf floorp-bin maplemono
+rm -rf floorp-bin maplemono waybar-updates
 
 echo "🔌 Habilitando servicios necesarios..."
 systemctl enable bluetooth       # Bluetooth 
