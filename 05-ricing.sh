@@ -64,5 +64,7 @@ if [[ "$a11y" == "y" || "$a11y" == "Y" ]]; then
     systemctl --user mask at-spi-dbus-bus.service
 fi
 
+# --- Limpieza ---
+sudo pacman -Rns $(pacman -Qtdq)
 
 EOF
