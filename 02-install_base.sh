@@ -36,9 +36,15 @@ parted -s "$DISK" set 1 esp on
 # Crear partición raíz (resto del disco)
 parted -s "$DISK" mkpart primary ext4 513MiB 100%
 
-# Asignar variables a particiones
-EFI_PART="${DISK}1"
-ROOT_PART="${DISK}2"
+# --- Detectar esquema de nombres de particiones ---
+if [[ "$DISK" =~ [0-9]$ ]]; then
+    PART_PREFIX="p"
+else
+    PART_PREFIX=""
+fi
+
+EFI_PART="${DISK}${PART_PREFIX}1"
+ROOT_PART="${DISK}${PART_PREFIX}2"
 
 # --- Formatear ---
 echo "💾 Formateando particiones..."
