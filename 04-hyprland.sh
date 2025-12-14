@@ -87,7 +87,7 @@ rm -rf floorp-bin maplemono
 echo "🔌 Habilitando servicios necesarios..."
 systemctl enable bluetooth       # Bluetooth 
 systemctl enable NetworkManager  # Internet
-systemctl enable ly              # Gestor de sesiones
+systemctl enable ly@tty1.service # Gestor de sesiones
 
 if [[ "$NETDSKSRV" == "y" || "$NETDSKSRV" == "Y" ]]; then
 systemctl enable avahi-daemon
