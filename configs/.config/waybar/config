@@ -42,8 +42,8 @@
         "has-updates": "󱍷",
         "updated": ""
     },
-    "exec-if": "which waybar-module-pacman-updates",
-    "exec": "waybar-module-pacman-updates --no-zero-output",
+    "exec-if": "which waybar-updates",
+    "exec": "waybar-updates",
     "on-click": "kitty -e paru -Syu --noconfirm && flatpak update --assumeyes"
 },
 
