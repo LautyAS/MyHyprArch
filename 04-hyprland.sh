@@ -51,7 +51,7 @@ packages=(hyprland hyprpaper kitty waybar wofi ly dunst brightnessctl nwg-look j
     file-roller thunar-archive-plugin unzip p7zip unrar-free \
     polkit polkit-gnome \
     network-manager-applet \
-    bluez bluez-utils blueman \
+    bluez bluez-utils blueman libldac libfdk-aac\
     htop fastfetch \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
