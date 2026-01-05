@@ -14,3 +14,4 @@ cp -r configs/* /mnt/root/configs
 ./05-ricing.sh
 
 echo "=== Instalación finalizada! ==="
+printf "Se recomienda encarecidamente instalar fwupd, con eso podés verificar actualizaciones de firmware ejecutando:\n  fwupdmgr get-devices\n  fwupdmgr get-updates"
