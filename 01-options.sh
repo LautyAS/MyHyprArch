@@ -88,9 +88,35 @@ case "$SAMEPASS" in
         ;;
 esac
 
-# --- KERNEL ---
-KERNEL=$(printf "linux\nlinux-zen\nlinux-lts\n" | fzf --height=10 --border --prompt="KERNEL: ")
-echo "KERNEL seleccionado: $KERNEL"
+echo "Seleccione el kernel de su preferencia:"
+KERNEL_CHOICE=$(printf "%s\n" \
+  "linux|linux-headers|Estándar" \
+  "linux-zen|linux-zen-headers|Desktop / Gaming (menor latencia)" \
+  "linux-lts|linux-lts-headers|Kernel estable, menos actualizaciones" \
+  | fzf \
+      --height=10 \
+      --border \
+      --prompt="KERNEL: " \
+      --with-nth=1,3 \
+      --delimiter="|" \
+      --header="Seleccioná el kernel a instalar")
+      
+IFS="|" read -r KERNEL_PKG HEADERS_PKG KERNEL_DESC <<< "$KERNEL_CHOICE"
+
+EXTRA_FW=""
+
+echo "Indique el fabricante de su CPU:"
+CPU_VENDOR=$(lscpu | awk -F: '/Vendor ID/ {print $2}' | xargs)
+
+case "$CPU_VENDOR" in
+  GenuineIntel)
+    MICROCODE=intel-ucode
+    EXTRA_FW+=" sof-firmware"
+    ;;
+  AuthenticAMD)
+    MICROCODE=amd-ucode
+    ;;
+esac
 
 # --- Servicio de accesibilidad ---
 read -p "¿Querés desactivar (at-spi-dbus-bus) para ahorrar algunos recursos? (Es un servicio de accesibilidad, la mayoría de la gente no lo necesita) (y/N): " a11y
@@ -121,7 +147,9 @@ echo "Resumen de configuración:"
 echo "  Disco:          $DISK"
 echo "  Usuario:        $USERNAME"
 echo "  Hostname:       $HOSTNAME"
-echo "  Kernel:         $KERNEL"
+echo "  Kernel:         $KERNEL_PKG"
+echo "  CPU:            $CPU_VENDOR"
+echo "  Headers:        $HEADERS_PKG"
 echo "  Zona horaria:   $TIMEZONE"
 echo "  Locale:         $LOCALE"
 echo "  GPU:            $GPU"
@@ -140,7 +168,9 @@ USERNAME="$USERNAME"
 HOSTNAME="$HOSTNAME"
 PASSWORD="$PASSWORD"
 ROOTPASS="$ROOTPASS"
-KERNEL="$KERNEL"
+KERNEL_PKG="$KERNEL_PKG"
+HEADERS_PKG="$HEADERS_PKG"
+MICROCODE="$MICROCODE"
 TIMEZONE="$TIMEZONE"
 LOCALE="$LOCALE"
 PRINTSRV="$PRINTSRV"
