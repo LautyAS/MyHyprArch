@@ -27,25 +27,25 @@ fi
 
 USER_HOME="/home/$USERNAME"
 
-#echo "📂 Asegurando directorios del usuario..."
-#mkdir -p "$USER_HOME/.config"
-#mkdir -p "$USER_HOME/.themes"
-#mkdir -p "$USER_HOME/.icons"
-#mkdir -p "$USER_HOME/Pictures/wallpapers"
-#mkdir -p "$USER_HOME/Pictures/Screenshots"
-#mkdir -p "$USER_HOME/.config/dunst"
+echo "📂 Asegurando directorios del usuario..."
+mkdir -p "$USER_HOME/.config"
+mkdir -p "$USER_HOME/.themes"
+mkdir -p "$USER_HOME/.icons"
+mkdir -p "$USER_HOME/Pictures/wallpapers"
+mkdir -p "$USER_HOME/Pictures/Screenshots"
+mkdir -p "$USER_HOME/.config/dunst"
 
 # --- Copiar configs ---
-#if [[ -d /home/configs/ ]]; then
-#    echo "📁 Copiando configuraciones de usuario..."
-#    cp -r /home/configs/* "$USER_HOME/"
-#fi
+if [[ -d /home/configs/ ]]; then
+    echo "📁 Copiando configuraciones de usuario..."
+    cp -r /home/configs/* "$USER_HOME/"
+fi
 
 # --- Copiar wallpapers ---
-#if [[ -d /home/rice/wallpapers ]]; then
-#    cp -r /home/rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
-#    echo "✅ Wallpapers copiados."
-#fi
+if [[ -d /home/rice/wallpapers ]]; then
+    cp -r /home/rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
+    echo "✅ Wallpapers copiados."
+fi
 
 # --- Fcitx5 autostart ---
 AUTOSTART="$USER_HOME/.config/hypr/autostart.conf"
@@ -56,7 +56,7 @@ if ! grep -q "fcitx5" "$AUTOSTART" 2>/dev/null; then
 fi
 
 # --- Permisos ---
-chown -R "$USERNAME:$USERNAME" "$USER_HOME/.config" "$USER_HOME/Pictures"
+chown -R "$USERNAME:$USERNAME" "$USER_HOME/.config" "$USER_HOME/Pictures" "$USER_HOME/.themes" "$USER_HOME/.icons" "$USER_HOME/Pictures/wallpapers" "$USER_HOME/Pictures/Screenshots" "$USER_HOME/.config/dunst"
 
 echo "✨ Ricing aplicado correctamente dentro del chroot."
 
