@@ -71,18 +71,11 @@ reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorli
 
 # --- Instalación base ---
 echo "📦 Instalando sistema base..."
-pacstrap /mnt base base-devel linux linux-firmware linux-headers neovim sudo networkmanager grub efibootmgr git reflector
+pacstrap /mnt base base-devel "$KERNEL_PKG" "$HEADERS_PKG" "$MICROCODE" linux-firmware $MICROCODE $EXTRA_FW neovim sudo networkmanager grub efibootmgr git reflector
 
 # --- fstab ---
 echo "🗂️ Generando fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
-
-# --- Crear swapfile ---
-#echo "🧠 Creando swapfile de tamaño $SWAP_SIZE..."
-#fallocate -l "$SWAP_SIZE" /mnt/swapfile
-#chmod 600 /mnt/swapfile
-#mkswap /mnt/swapfile
-#swapon /mnt/swapfile
 echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
 
 # --- Variables ---
