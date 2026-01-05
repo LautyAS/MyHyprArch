@@ -88,6 +88,10 @@ case "$SAMEPASS" in
         ;;
 esac
 
+# --- KERNEL ---
+KERNEL=$(printf "linux\nlinux-zen\nlinux-lts\n" | fzf --height=10 --border --prompt="KERNEL: ")
+echo "KERNEL seleccionado: $KERNEL"
+
 # --- Servicio de accesibilidad ---
 read -p "¿Querés desactivar (at-spi-dbus-bus) para ahorrar algunos recursos? (Es un servicio de accesibilidad, la mayoría de la gente no lo necesita) (y/N): " a11y
 
@@ -117,6 +121,7 @@ echo "Resumen de configuración:"
 echo "  Disco:          $DISK"
 echo "  Usuario:        $USERNAME"
 echo "  Hostname:       $HOSTNAME"
+echo "  Kernel:         $KERNEL"
 echo "  Zona horaria:   $TIMEZONE"
 echo "  Locale:         $LOCALE"
 echo "  GPU:            $GPU"
@@ -135,6 +140,7 @@ USERNAME="$USERNAME"
 HOSTNAME="$HOSTNAME"
 PASSWORD="$PASSWORD"
 ROOTPASS="$ROOTPASS"
+KERNEL="$KERNEL"
 TIMEZONE="$TIMEZONE"
 LOCALE="$LOCALE"
 PRINTSRV="$PRINTSRV"
