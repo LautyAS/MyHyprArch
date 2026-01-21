@@ -76,7 +76,7 @@ pacstrap /mnt base base-devel "$KERNEL_PKG" "$HEADERS_PKG" "$MICROCODE" linux-fi
 # --- fstab ---
 echo "🗂️ Generando fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
-echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
+#echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
 
 # --- Variables ---
 cp /tmp/install_vars.sh /mnt/tmp_install_vars.sh
