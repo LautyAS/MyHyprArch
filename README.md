@@ -7,16 +7,16 @@ El instalador también ofrece opciones de instalar Steam, Discord y otras aplica
 Para la estetica se usa la fuente Maple Mono, el tema GTK Kimi (Dark) y el tema de iconos Vimix clásico, para dar una apariencia limpia y amigable
 Algunos de estos paquetes se encuentran en el AUR, todos los creditos a sus creadores originales:
 
-Maple Mono NF: https://github.com/subframe7536/Maple-font
-Kimi: https://github.com/EliverLara/Kimi
-Vimix Icon Theme: https://github.com/vinceliuice/vimix-icon-theme
+Maple Mono NF: https://github.com/subframe7536/Maple-font                                          
+Kimi: https://github.com/EliverLara/Kimi                                                            
+Vimix Icon Theme: https://github.com/vinceliuice/vimix-icon-theme                                  
 
 Pronto se agregarán opciones de customización para mantener el estilo "Clásico" del script con Waybar, Blueman, nm-applet, pavucontrol, etc... Y una nueva opción que integra todo en Quickshell!
 
 Keybindings por defecto:
 
-SUPER + M : Cerrar Hyprland
-SUPER + A : Lanzador de aplicaciónes
-SUPER + Q : Cerrar aplicación
-SUPER + F : Abrir explorador web (Floorp)
-SUPER + E : Abrir explorador de archivos
+SUPER + M : Cerrar Hyprland                                                                              
+SUPER + A : Lanzador de aplicaciónes                                                                            
+SUPER + Q : Cerrar aplicación                                                                                  
+SUPER + F : Abrir explorador web (Floorp)                                                                  
+SUPER + E : Abrir explorador de archivos                                                                    
