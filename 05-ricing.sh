@@ -10,6 +10,7 @@ if [[ ! -d /mnt ]]; then
     exit 1
 fi
 
+source /tmp/install_vars.sh
 cp -r configs/ /mnt/home/$USERNAME
 cp -r rice/ /mnt/home/$USERNAME
 
@@ -65,6 +66,9 @@ if [[ "$a11y" == "y" || "$a11y" == "Y" ]]; then
 fi
 
 # --- Limpieza ---
-sudo pacman -Rns $(pacman -Qtdq)
+orphans=$(pacman -Qtdq)
+if [[ -n "$orphans" ]]; then
+    pacman -Rns --noconfirm $orphans
+fi
 
 EOF

@@ -24,27 +24,7 @@ fi
 select_option() {
     local prompt="$1"; shift
     local options=("$@")
-
-    #if $USE_FZF; then
-        echo "${options[@]}" | tr ' ' '\n' | fzf --prompt "$prompt → "
-    #else
-    #    echo "$prompt"
-    #    local i=1
-    #    for opt in "${options[@]}"; do
-    #        echo "  $i) $opt"
-    #        ((i++))
-    #    done
-    #    local choice
-    #    while true; do
-    #        read -rp "Selecciona una opción [1-${#options[@]}]: " choice
-    #        if [[ "$choice" =~ ^[0-9]+$ ]] && ((choice >= 1 && choice <= ${#options[@]})); then
-    #            echo "${options[$((choice - 1))]}"
-    #            return
-    #        else
-    #            echo "❌ Opción inválida. Intenta de nuevo."
-    #        fi
-    #    done
-    #fi
+    echo "${options[@]}" | tr ' ' '\n' | fzf --prompt "$prompt → "
 }
 
 # --- Selección de disco ---
@@ -156,7 +136,7 @@ echo "  GPU:            $GPU"
 
 echo ""
 read -rp "¿Confirmar y guardar configuración? (y/N): " CONFIRM
-if [[ "$CONFIRM" != "y" || "$CONFIRM" == "Y" ]]; then
+if [[ "$CONFIRM" != "y" && "$CONFIRM" == "Y" ]]; then
     echo "Instalación cancelada."
     exit 0
 fi

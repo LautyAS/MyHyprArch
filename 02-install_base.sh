@@ -15,7 +15,7 @@ source /tmp/install_vars.sh
 SWAP_SIZE="${SWAP_SIZE:-4G}"
 
 # --- Confirmar disco ---
-read -rp "Esto borrará todo en $INSTALL_DISK. Continuar? [y/N]: " CONFIRM
+read -rp "Esto borrará todo en $DISK. Continuar? [y/N]: " CONFIRM
 case "$CONFIRM" in
     [yY][eE][sS]|[yY]) 
         echo "Procediendo con el formateo..."
@@ -67,6 +67,7 @@ swapon /mnt/swapfile
 
 # --- Mirrors ---
 echo "🌐 Actualizando mirrors más rápidos..."
+pacman -Sy
 reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
 # --- Instalación base ---
@@ -76,7 +77,7 @@ pacstrap /mnt base base-devel "$KERNEL_PKG" "$HEADERS_PKG" "$MICROCODE" linux-fi
 # --- fstab ---
 echo "🗂️ Generando fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
-#echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
+echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
 
 # --- Variables ---
 cp /tmp/install_vars.sh /mnt/tmp_install_vars.sh

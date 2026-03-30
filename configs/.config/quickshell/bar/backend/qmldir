@@ -1,0 +1,4 @@
+singleton SystemData 1.0 SystemData.qml
+singleton AudioData 1.0 AudioData.qml
+singleton BrightnessData 1.0 BrightnessData.qml
+singleton BatteryData 1.0 BatteryData.qml
