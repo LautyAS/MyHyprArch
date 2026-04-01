@@ -1,0 +1,12 @@
+{
+  "bg": "#f4f6f8",
+  "bg_alt": "#e6e9ef",
+  "bg_hover": "#d8dee9",
+  "fg": "#2e3440",
+  "fg_dim": "#4c566a",
+  "accent": "#81a1c1",
+  "red": "#d57780",
+  "green": "#8fbc8f",
+  "yellow": "#ebcb8b",
+  "border": "#cdd6e3"
+}

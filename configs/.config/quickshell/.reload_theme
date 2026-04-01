@@ -1,0 +1,7 @@
+FileSystemWatcher {
+    path: Qt.resolvedUrl("../.reload_theme")
+
+    onFileChanged: {
+        Backend.Theme.load()
+    }
+}

@@ -1,0 +1,64 @@
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import "../../backend/" as Backend
+
+Item {
+    width: 18
+    height: parent.height
+    anchors.verticalCenter: parent.verticalCenter
+
+    property string mode: "dark"
+
+    Process {
+    id: setTheme
+    command: []
+
+    function onFinished() {
+        Backend.Theme.load()
+    }
+}
+
+    Rectangle {
+        anchors.fill: parent
+        color: mouseArea.containsMouse ? Backend.Theme.bgHover : "transparent"
+        radius: 4
+
+        Behavior on color {
+            ColorAnimation { duration: 150 }
+        }
+    }
+
+    Text {
+        anchors.centerIn: parent
+        text: "󰉼"
+        font.family: "Maple Mono NF"
+        font.pixelSize: 12
+        color: Backend.Theme.fg
+    }
+
+    MouseArea {
+    id: mouseArea
+    anchors.fill: parent
+    hoverEnabled: true
+
+    onClicked: {
+        mode = (mode === "dark") ? "light" : "dark"
+
+        setTheme.command = [
+            "bash",
+            "-c",
+            "~/.config/hypr/scripts/set-theme.sh " + mode
+        ]
+
+        setTheme.running = true
+}
+Component.onCompleted: {
+    // hack simple: detectar por color actual
+    if (Backend.Theme.bg === "#1f2329")
+        mode = "dark"
+    else
+        mode = "light"
+}
+}
+}

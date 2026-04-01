@@ -1,91 +1,79 @@
 #!/bin/bash
 
 WALL_DIR="$HOME/.config/hypr/wallpapers"
-STATE_FILE="$HOME/.config/hypr/state/wallpaper"
-THEME=$(cat ~/.config/hypr/state/theme)
+CACHE_DIR="$HOME/.cache/hypr"
+INDEX_FILE="$CACHE_DIR/wallpaper_index"
 
-# Prioridad: wallpapers del tema → global
-#if [ -d "$WALL_DIR/$THEME" ]; then
-#    DIR="$WALL_DIR/$THEME"
-#else
-#    DIR="$WALL_DIR/global"
-#fi
-#
-#mapfile -t WALLS < <(find "$DIR" -type f 2>/dev/null)
-#
-#if [ ${#WALLS[@]} -eq 0 ]; then
-#    echo "No hay wallpapers"
-#    exit 1
-#fi
+mkdir -p "$CACHE_DIR"
 
-DIR="$WALL_DIR/$THEME"
+# Lista ordenada de wallpapers
+mapfile -t WALLS < <(find "$WALL_DIR" -type f | sort)
 
-if [ -d "$DIR" ]; then
-    mapfile -t WALLS < <(find "$DIR" -type f)
+TOTAL=${#WALLS[@]}
+[ "$TOTAL" -eq 0 ] && exit 1
+
+# Leer índice actual
+if [ -f "$INDEX_FILE" ]; then
+    INDEX=$(cat "$INDEX_FILE")
+else
+    INDEX=0
 fi
 
-# fallback si está vacío
-if [ ${#WALLS[@]} -eq 0 ]; then
-    mapfile -t WALLS < <(find "$WALL_DIR/global" -type f)
-fi
-
-# si sigue vacío → abortar
-if [ ${#WALLS[@]} -eq 0 ]; then
-    echo "No hay wallpapers disponibles"
-    exit 1
-fi
-
-
-CURRENT=$(cat "$STATE_FILE" 2>/dev/null)
-
-INDEX=0
-for i in "${!WALLS[@]}"; do
-    if [ "${WALLS[$i]}" == "$CURRENT" ]; then
-        INDEX=$i
-        break
-    fi
-done
-
+# Cambiar índice según argumento
 case "$1" in
     next)
-        NEW_INDEX=$(( (INDEX + 1) % ${#WALLS[@]} ))
+        INDEX=$((INDEX + 1))
         ;;
     prev)
-        NEW_INDEX=$(( (INDEX - 1 + ${#WALLS[@]}) % ${#WALLS[@]} ))
+        INDEX=$((INDEX - 1))
         ;;
     *)
-        NEW_INDEX=0
+        INDEX=$((INDEX + 1))
         ;;
 esac
 
-NEW_WALL="${WALLS[$NEW_INDEX]}"
+# Wrap
+if [ "$INDEX" -ge "$TOTAL" ]; then
+    INDEX=0
+elif [ "$INDEX" -lt 0 ]; then
+    INDEX=$((TOTAL - 1))
+fi
 
-echo "$NEW_WALL" > "$STATE_FILE"
+# Guardar índice
+echo "$INDEX" > "$INDEX_FILE"
 
-# Posición del cursor (si falla, fallback al centro)
+NEW_WALL="${WALLS[$INDEX]}"
+
+# Cursor global
 POS=$(hyprctl cursorpos 2>/dev/null)
-
 IFS=',' read -r X Y <<< "$POS"
 X=$(echo "$X" | tr -d ' ')
 Y=$(echo "$Y" | tr -d ' ')
 
-# altura del monitor activo
-MON_HEIGHT=$(hyprctl monitors -j | jq -r '.[] | select(.focused==true) | .height')
+# Monitor activo
+read MON_NAME MON_X MON_Y MON_WIDTH MON_HEIGHT <<< $(hyprctl monitors -j | jq -r '.[] | select(.focused==true) | "\(.name) \(.x) \(.y) \(.width) \(.height)"')
 
-# fallback
+# Fallbacks
+[ -z "$MON_WIDTH" ] && MON_WIDTH=1920
 [ -z "$MON_HEIGHT" ] && MON_HEIGHT=1080
+[ -z "$MON_X" ] && MON_X=0
+[ -z "$MON_Y" ] && MON_Y=0
 
-# invertir Y (robusto, soporta floats)
-Y_INV=$(awk "BEGIN {print $MON_HEIGHT - $Y}")
+# Posición relativa
+REL_X=$(awk "BEGIN {print $X - $MON_X}")
+REL_Y=$(awk "BEGIN {print $Y - $MON_Y}")
+REL_Y_INV=$(awk "BEGIN {print $MON_HEIGHT - $REL_Y}")
 
-# sanity check
-if [[ -z "$X" || -z "$Y_INV" ]]; then
-    X=960
-    Y_INV=540
+# Sanity
+if [[ -z "$REL_X" || -z "$REL_Y_INV" ]]; then
+    REL_X=$(awk "BEGIN {print $MON_WIDTH / 2}")
+    REL_Y_INV=$(awk "BEGIN {print $MON_HEIGHT / 2}")
 fi
 
-swww img "$NEW_WALL" \
+# Aplicar wallpaper
+awww img -o "$MON_NAME" "$NEW_WALL" \
     --transition-type grow \
-    --transition-pos "$X,$Y_INV" \
+    --transition-pos "$REL_X,$REL_Y_INV" \
     --transition-duration 1 \
-    --transition-fps 60
+    --transition-fps 60 \
+    --resize fit

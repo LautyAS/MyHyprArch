@@ -1,52 +1,46 @@
 #!/bin/bash
 
-THEME_DIR="$HOME/.config/hypr/themes"
-STATE_DIR="$HOME/.config/hypr/state"
+THEME=$1
+HYPR="$HOME/.config/hypr"
+QS="$HOME/.config/quickshell"
+KITTY="$HOME/.config/kitty"
 
-mapfile -t THEMES < <(find "$THEME_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
+if [[ "$THEME" != "dark" && "$THEME" != "light" ]]; then
+    echo "Usage: set-theme.sh dark|light"
+    exit 1
+fi
 
-CURRENT=$(cat "$STATE_DIR/theme" 2>/dev/null)
+# ---------------- Hyprland ----------------
+ln -sf "$HYPR/themes/$THEME.conf" "$HYPR/modules/theme.conf"
 
-[ -z "$CURRENT" ] && CURRENT="${THEMES[0]}"
+# ---------------- GTK ----------------
+if [ "$THEME" = "dark" ]; then
+    gsettings set org.gnome.desktop.interface gtk-theme Kimi-dark
+    gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+    kvantummanager --set Kimi-dark
+else
+    gsettings set org.gnome.desktop.interface gtk-theme Kimi
+    gsettings set org.gnome.desktop.interface color-scheme prefer-light
+    kvantummanager --set Kimi
+fi
 
-INDEX=0
-for i in "${!THEMES[@]}"; do
-    if [ "${THEMES[$i]}" == "$CURRENT" ]; then
-        INDEX=$i
-        break
-    fi
-done
+# ---------------- QT ----------------
+qt6ct_conf="$HOME/.config/qt6ct/qt6ct.conf"
+sed -i 's/^style=.*/style=Fusion/' "$qt6ct_conf"
 
-case "$1" in
-    next)
-        NEW_INDEX=$(( (INDEX + 1) % ${#THEMES[@]} ))
-        ;;
-    prev)
-        NEW_INDEX=$(( (INDEX - 1 + ${#THEMES[@]}) % ${#THEMES[@]} ))
-        ;;
-    *)
-        for i in "${!THEMES[@]}"; do
-            if [ "${THEMES[$i]}" == "$1" ]; then
-                NEW_INDEX=$i
-                break
-            fi
-        done
-        ;;
-esac
+# ---------------- Kitty ----------------
+ln -sf "$KITTY/themes/$THEME.conf" "$KITTY/themes/current.conf"
+pkill -USR1 kitty
 
-NEW_THEME="${THEMES[$NEW_INDEX]}"
+# ---------------- Quickshell ----------------
+ln -sf "$QS/colors/$THEME.json" "$QS/colors/current.json"
+echo "$THEME" > "$QS/colors/.current_mode"
 
-# ✅ GUARDAR BIEN
-echo "$NEW_THEME" > "$STATE_DIR/theme"
-
-# aplicar modo actual
-MODE=$(cat "$STATE_DIR/mode" 2>/dev/null)
-[ -z "$MODE" ] && MODE="dark"
-
-ln -sfn "$THEME_DIR/$NEW_THEME/$MODE.conf" "$THEME_DIR/$NEW_THEME/active.conf"
-ln -sfn "$THEME_DIR/$NEW_THEME" "$THEME_DIR/current"
-
-# wallpaper automático del tema
-~/.config/hypr/scripts/set-wallpaper.sh next
-
+# ---------------- Reload Hyprland ----------------
 hyprctl reload
+
+# ---------------- Restart Quickshell ----------------
+pkill qs
+setsid qs >/dev/null 2>&1 &
+
+notify-send "Theme" "Switched to $THEME theme"

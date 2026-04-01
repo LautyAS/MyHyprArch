@@ -1,0 +1,15 @@
+pragma Singleton
+import QtQuick
+
+QtObject {
+    property color bg: "#1f2329"
+    property color bg_alt: "#2a2f38"
+    property color bg_hover: "#343a46"
+    property color fg: "#d3dae3"
+    property color fg_dim: "#a6adbb"
+    property color accent: "#7aa2f7"
+    property color red: "#f7768e"
+    property color green: "#9ece6a"
+    property color yellow: "#e0af68"
+    property color border: "#3a3f4b"
+}
