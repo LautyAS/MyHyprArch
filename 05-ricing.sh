@@ -42,6 +42,13 @@ if [[ -d /home/configs/ ]]; then
     cp -r /home/configs/* "$USER_HOME/"
 fi
 
+# --- Instalar icon themes a nivel sistema ---
+if [[ -d "$USER_HOME/.icons" ]]; then
+    echo "🎨 Instalando icon themes en /usr/share/icons..."
+    cp -r "$USER_HOME/.icons/"* /usr/share/icons/
+    rm -rf "$USER_HOME/.icons"
+fi
+
 # --- Copiar wallpapers ---
 if [[ -d /home/rice/wallpapers ]]; then
     cp -r /home/rice/wallpapers/* "$USER_HOME/Pictures/wallpapers/"
