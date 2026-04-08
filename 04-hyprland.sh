@@ -43,16 +43,16 @@ rm -rf paru-bin
 echo "🎨 Instalando Hyprland, utilidades y floorp..."
 
 packages=(hyprland awww kitty quickshell wofi ly dunst brightnessctl nwg-look jq tree \
-    xdg-user-dirs xdg-utils qt5-wayland qt6-wayland nss-mdns avachi\
+    xdg-user-dirs xdg-utils qt5-wayland qt6-wayland nss-mdns avahi \
     pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber lib32-pipewire pavucontrol \
     lib32-mesa mesa-utils vulkan-tools ffmpeg4.4 \
     fcitx5-im fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-mozc \
     grim slurp swappy wl-clipboard \
-    gvfs gvfs-mtp gvfs-afc gvfs-smb gvfs-nfs udiskie thunar-volman mpv imv sshfs tumbler ffmpegthumbnailer\
+    gvfs gvfs-mtp gvfs-afc gvfs-smb gvfs-nfs udiskie thunar-volman mpv imv sshfs tumbler ffmpegthumbnailer \
     file-roller thunar-archive-plugin unzip 7zip unrar-free \
     polkit polkit-gnome \
     network-manager-applet \
-    bluez bluez-utils blueman libldac libfdk-aac\
+    bluez bluez-utils blueman libldac libfdk-aac \
     htop fastfetch \
     bash-completion \
     xdg-desktop-portal xdg-desktop-portal-wlr \
