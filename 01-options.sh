@@ -54,7 +54,7 @@ fi
 read -rp "    ¿Desea que root tenga la misma contraseña que $USERNAME? [y/N]: " SAMEPASS
 case "$SAMEPASS" in
     [yY][eE][sS]|[yY])
-        ROOTPASS="$USERPASS"
+        ROOTPASS="$PASSWORD"
         ;;
     *)
         while true; do
@@ -136,7 +136,7 @@ echo "  GPU:            $GPU"
 
 echo ""
 read -rp "¿Confirmar y guardar configuración? (y/N): " CONFIRM
-if [[ "$CONFIRM" != "y" && "$CONFIRM" == "Y" ]]; then
+if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
     echo "Instalación cancelada."
     exit 0
 fi
@@ -157,6 +157,7 @@ PRINTSRV="$PRINTSRV"
 a11y="$a11y"
 GPU="$GPU"
 NETDSKSRV="$NETDSKSRV"
+EXTRA_FW="$EXTRA_FW"
 EOF
 
 # --- Si ya existe /mnt (para cuando se corre desde el live antes del chroot) ---

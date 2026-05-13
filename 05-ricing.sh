@@ -37,9 +37,9 @@ mkdir -p "$USER_HOME/Pictures/Screenshots"
 mkdir -p "$USER_HOME/.config/dunst"
 
 # --- Copiar configs ---
-if [[ -d /home/configs/ ]]; then
+if [[ -d /home/$USERNAME/configs/ ]]; then
     echo "📁 Copiando configuraciones de usuario..."
-    cp -r /home/configs/* "$USER_HOME/"
+    cp -r /home/$USERNAME/configs/* "$USER_HOME/"
 fi
 
 # --- Instalar icon themes a nivel sistema ---

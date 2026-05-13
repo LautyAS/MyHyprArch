@@ -72,7 +72,7 @@ reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorli
 
 # --- Instalación base ---
 echo "📦 Instalando sistema base..."
-pacstrap /mnt base base-devel "$KERNEL_PKG" "$HEADERS_PKG" "$MICROCODE" linux-firmware $MICROCODE $EXTRA_FW neovim sudo networkmanager grub efibootmgr git reflector
+pacstrap /mnt base base-devel "$KERNEL_PKG" "$HEADERS_PKG" "$MICROCODE" linux-firmware $EXTRA_FW neovim sudo networkmanager grub efibootmgr git reflector
 
 # --- fstab ---
 echo "🗂️ Generando fstab..."
